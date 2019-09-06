@@ -19,6 +19,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jshintConfig": {
+    "esversion": "8"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

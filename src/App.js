@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  CardText,
-  CardBody,
-  CardTitle,
-  Button,
-  Input,
-  Table,
-} from 'reactstrap';
 import './App.css';
 import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import { getCurrentLocation } from './api/getCurrentLocation';
-import { lookupPlaceName } from './api/lookupPlaceName';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
 
@@ -23,11 +13,13 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 
 /* To do:
 [x] display Map
-[ ] put text on address
+[ ] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
 [ ] upload price data to MongoDB
 [ ] connect MongoDB to app
-[ ] collate
+[ ] collate coords for addresses
 [ ] put all prices on map
+[ ] calculate today prices of properties
+[ ] handle VAT on new properties
 
 
 Stretch:
@@ -169,13 +161,7 @@ class App extends Component {
         resolve(await getCurrentLocation());
       } else if (!this.state.locationCoords) {
         // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
-        resolve(
-          await lookupPlaceName(
-            map,
-            this.state.locationTextBoxValue,
-            this.state.center, // default value
-          ),
-        );
+        resolve(1);
       } else {
         resolve(this.state.locationCoords);
       }
@@ -191,20 +177,7 @@ class App extends Component {
           ref={mapElement => (this.mapElement = mapElement)}
         />
 
-        <div id="cardtable-container">
-          {!this.state.eventDate && (
-            <Card id="welcome-card">
-              <CardBody>
-                <CardTitle>
-                  ..
-                </CardTitle>
-                <CardText>
-                  ..
-                </CardText>
-              </CardBody>
-            </Card>
-          )}
-        </div>
+
       </div>
     );
   }

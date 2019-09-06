@@ -1,6 +1,6 @@
 /* global google */
 
-export function addMarkersToMap(filteredPlacesArray, map) {
+export function addMarkersToMap(addressCoords, map) {
   let greenIconURL1 =
     'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png&text=';
   let redIconURL1 =
@@ -14,23 +14,14 @@ export function addMarkersToMap(filteredPlacesArray, map) {
   let iconURL1 = '';
   let markerArray = [];
 
-  let returnArray = filteredPlacesArray.map(element => {
-    if (element.placeType === 'cafe') {
-      label = letterLabels[letterLabelIndex++ % letterLabels.length];
-      iconURL1 = redIconURL1;
-    } else {
-      label = numberLabel++;
-      iconURL1 = greenIconURL1;
-    }
+    label = numberLabel++;
+    iconURL1 = greenIconURL1;
 
     let marker = new google.maps.Marker({
-      position: element.geometry.location,
+      position: addressCoords,
       map: map,
       icon: iconURL1 + label + iconURL2,
     });
-    markerArray.push(marker);
 
-    return Object.assign(element, { label: label });
-  });
-  return [returnArray, markerArray];
+  return [addressCoords, marker];
 }

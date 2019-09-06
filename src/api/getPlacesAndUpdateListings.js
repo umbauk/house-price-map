@@ -7,18 +7,17 @@ export async function getPlacesAndUpdateListings(
   mapCenter, // lat, lng object
   searchRadius,
 ) {
-  let placeAndLabelsArray, markerArray;
   console.log('2) getPlacesAndUpdateListings starting...');
-
-  const filteredPlacesArray = await refreshNearbyPlaces(
+  let marker
+  const addressCoords = await refreshNearbyPlaces(
     map,
     mapCenter,
   );
-  [placeAndLabelsArray, markerArray] = addMarkersToMap(
-    filteredPlacesArray,
+  [addressCoords, marker] = addMarkersToMap(
+    addressCoords,
     map,
   );
 
   console.log('5) refreshPlacesAndUpdateListings finished');
-  return [placeAndLabelsArray, markerArray];
+  return [addressCoords, marker];
 }

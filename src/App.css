@@ -1,33 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+h2 {
+  font-size: 0.5em;
+}
+
 .App {
   text-align: center;
+  margin: 0;
+  background-color: rgb(207, 207, 207);
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+#parent-window {
+  background-color: rgb(207, 207, 207);
+  display: inline-block;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#map-element {
+  height: 100vh;
+  width: 100vw;
+  float: left;
 }
 
-.App-link {
-  color: #61dafb;
+#welcome-card {
+  position: absolute;
+  top: 20%;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#cardtable-container {
+  position: absolute;
+  top: 0vh;
+  right: 0vw;
+  width: 40vw;
+}
+
+.card-text {
+  font-size: 1.5em;
+}
+
+#cafe-results-card {
+  width: 100%;
+}
+
+#kids-activity-results-card {
+  width: 100%;
+  top: 70%;
+}
+
+.button {
+  margin: 5px;
 }

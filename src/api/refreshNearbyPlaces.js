@@ -1,20 +1,16 @@
 /* global google */
 import getPlacesList from './getPlacesList.js';
 
-export async function refreshNearbyPlaces(
-  map,
-  mapCenter,
-) {
+export async function refreshNearbyPlaces(map, mapCenter) {
   const centerPoint = mapCenter;
   const service = new google.maps.places.PlacesService(map);
-  const geocoder = new google.maps.Geocoder()
-  const address = '74 Rathdown Park, Terenue, Dublin 6W'
+  const geocoder = new google.maps.Geocoder();
+  const address = '74 Rathdown Park, Terenue, Dublin 6W';
 
-  let addressCoords = await getPlacesList(geocoder, address)
+  let addressCoords = await getPlacesList(geocoder, address);
 
-  console.log(addressCoords)
-  return addressCoords
-
+  console.log(addressCoords);
+  return addressCoords;
 }
 
 export function checkPlaceIsWithinRadius(
@@ -43,5 +39,3 @@ export function checkPlaceIsWithinRadius(
     );
   });
 }
-
-

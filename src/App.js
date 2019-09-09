@@ -13,8 +13,8 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 
 /* To do:
 [x] display Map
-[ ] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
-[ ] upload price data to MongoDB
+[x] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
+[x] upload price data to MongoDB
 [ ] connect MongoDB to app
 [ ] collate coords for addresses
 [ ] put all prices on map
@@ -82,7 +82,7 @@ class App extends Component {
 
   async updateListings(searchRadius) {
     try {
-      let placeMarkersArray, placeLabelsAndUrlArray, activityShouldbeIndoors;
+      let placeMarkersArray, placeLabelsAndUrlArray;
 
       // clear markers
       this.state.markers.forEach(marker => {
@@ -100,7 +100,6 @@ class App extends Component {
       [
         placeLabelsAndUrlArray,
         placeMarkersArray,
-        activityShouldbeIndoors,
       ] = await getPlacesAndUpdateListings(
         this.state.map,
         {
@@ -112,7 +111,6 @@ class App extends Component {
 
       this.setState({
         markers: [...placeMarkersArray],
-
       });
     } catch (error) {
       console.error(error);
@@ -168,16 +166,13 @@ class App extends Component {
     });
   };
 
-
   render() {
     return (
-      <div id="parent-window">
+      <div id='parent-window'>
         <div
-          id="map-element"
+          id='map-element'
           ref={mapElement => (this.mapElement = mapElement)}
         />
-
-
       </div>
     );
   }

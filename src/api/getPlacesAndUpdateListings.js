@@ -1,4 +1,3 @@
-
 import { addMarkersToMap } from './addMarkersToMap.js';
 import { refreshNearbyPlaces } from './refreshNearbyPlaces.js';
 
@@ -8,15 +7,9 @@ export async function getPlacesAndUpdateListings(
   searchRadius,
 ) {
   console.log('2) getPlacesAndUpdateListings starting...');
-  let marker
-  const addressCoords = await refreshNearbyPlaces(
-    map,
-    mapCenter,
-  );
-  [addressCoords, marker] = addMarkersToMap(
-    addressCoords,
-    map,
-  );
+  let marker;
+  let addressCoords = await refreshNearbyPlaces(map, mapCenter);
+  [addressCoords, marker] = addMarkersToMap(addressCoords, map);
 
   console.log('5) refreshPlacesAndUpdateListings finished');
   return [addressCoords, marker];

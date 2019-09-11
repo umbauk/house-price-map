@@ -1,4 +1,4 @@
-Date of Sale (dd/mm/yyyy),Address,Postal Code,County,Price (�),Not Full Market Price,VAT Exclusive,Description of Property,Property Size Description
+date_of_sale,address,postal_code,county,price,not_full_market_price,vat_exclusive,description_of_property,property_size_description
 "01/01/2010","5 Braemor Drive, Churchtown, Co.Dublin","","Dublin","�343,000.00","No","No","Second-Hand Dwelling house /Apartment",""
 "03/01/2010","134 Ashewood Walk, Summerhill Lane, Portlaoise","","Laois","�185,000.00","No","Yes","New Dwelling house /Apartment","greater than or equal to 38 sq metres and less than 125 sq metres"
 "04/01/2010","1 Meadow Avenue, Dundrum, Dublin 14","","Dublin","�438,500.00","No","No","Second-Hand Dwelling house /Apartment",""

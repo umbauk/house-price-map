@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
@@ -10,8 +11,7 @@ const indexRouter = require('./routes/index');
 const app = express();
 app.use(helmet());
 
-let mongoDB =
-  'mongodb+srv://umbauk:lasgdar81@cluster0-trix2.gcp.mongodb.net/property_price_database?retryWrites=true&w=majority';
+let mongoDB = process.env.MONGO_DB_URL;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));

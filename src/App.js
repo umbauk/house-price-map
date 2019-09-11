@@ -15,6 +15,7 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] display Map
 [x] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
 [x] upload price data to MongoDB
+[ ] write server code
 [ ] connect MongoDB to app
 [ ] collate coords for addresses
 [ ] put all prices on map

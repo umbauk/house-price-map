@@ -1,7 +1,7 @@
 const House = require('../models/house');
-const passwords = require('../../config');
+require('dotenv').config();
 const googleMapsClient = require('@google/maps').createClient({
-  key: config.passwords.GOOGLE_API_KEY,
+  key: process.env.GOOGLE_API_KEY,
 });
 
 exports.index = async (req, res, next) => {

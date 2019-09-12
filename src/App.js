@@ -17,10 +17,12 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] upload price data to MongoDB
 [ ] write server code
 [ ] connect MongoDB to app
-[ ] collate coords for addresses
+[x] collate coords for addresses
 [ ] put all prices on map
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties
+[ ] put estimated prices on map for all housesthat don't have price data properties
+  - find all addresses on street or within certain bounds
 
 
 Stretch:

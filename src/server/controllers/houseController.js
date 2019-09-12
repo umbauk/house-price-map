@@ -9,10 +9,14 @@ exports.index = async (req, res, next) => {
   try {
     // find addresses that do not currently have coordinates in the database
     let addresses = await House.find(
-      { lat: { $exists: false }, postal_code: 'Dublin 6' },
+      {
+        lat: { $exists: false },
+        postal_code: '',
+        address: { $regex: /Dublin 6$/i },
+      },
       'address',
       {
-        limit: 500,
+        limit: 1000,
       },
     );
 
@@ -36,6 +40,7 @@ exports.index = async (req, res, next) => {
                 } else {
                   doc.lat = response.json.results[0].geometry.location.lat;
                   doc.lng = response.json.results[0].geometry.location.lng;
+                  //doc.postal_code = 'Dublin 6';
                   doc.save();
                 }
               });

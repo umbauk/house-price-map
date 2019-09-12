@@ -13,8 +13,8 @@ let HouseSchema = new Schema(
     vat_exclusive: { type: String, enum: ['Yes', 'No'] },
     description_of_property: { type: String },
     property_size_description: { type: String },
-    //lat: { type: Number },
-    //lng: { type: Number },
+    lat: { type: Number },
+    lng: { type: Number },
   },
   { collection: 'dublin' },
 );

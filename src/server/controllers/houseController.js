@@ -12,7 +12,7 @@ exports.index = async (req, res, next) => {
       {
         lat: { $exists: false },
         postal_code: '',
-        address: { $regex: /Dublin 6$/i },
+        address: { $regex: /Dublin 6/i },
       },
       'address',
       {
@@ -40,7 +40,7 @@ exports.index = async (req, res, next) => {
                 } else {
                   doc.lat = response.json.results[0].geometry.location.lat;
                   doc.lng = response.json.results[0].geometry.location.lng;
-                  //doc.postal_code = 'Dublin 6';
+                  doc.postal_code = 'Dublin 6';
                   doc.save();
                 }
               });
@@ -49,6 +49,21 @@ exports.index = async (req, res, next) => {
         );
       }, 25);
     }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.getPrices = async (req, res, next) => {
+  try {
+    let soldHouses = await House.find(
+      {
+        postal_code: { $in: ['Dublin 6', 'Dublin 6w'] },
+      },
+      'lat lng price',
+    );
+
+    return res.json({ soldHouses });
   } catch (error) {
     return next(error);
   }

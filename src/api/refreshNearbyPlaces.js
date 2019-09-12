@@ -9,7 +9,6 @@ export async function refreshNearbyPlaces(map, mapCenter) {
 
   let addressCoords = await getPlacesList(geocoder, address);
 
-  console.log(addressCoords);
   return addressCoords;
 }
 

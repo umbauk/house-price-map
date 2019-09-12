@@ -47,6 +47,7 @@ class App extends Component {
 
     this.initMap = this.initMap.bind(this);
     this.updateListings = this.updateListings.bind(this);
+    this.getDataFromDb = this.getDataFromDb.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +84,12 @@ class App extends Component {
     });
   }
 
+  getDataFromDb = () => {
+    fetch('http://localhost:3001/getPrices')
+      .then(data => data.json())
+      .then(res => console.log(res));
+  };
+
   async updateListings(searchRadius) {
     try {
       let placeMarkersArray, placeLabelsAndUrlArray;
@@ -99,6 +106,8 @@ class App extends Component {
         },
         markers: [],
       });
+
+      this.getDataFromDb();
 
       [
         placeLabelsAndUrlArray,

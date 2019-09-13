@@ -1,13 +1,32 @@
 /* global google */
-import getPlacesList from './getPlacesList.js';
 
 export async function refreshNearbyPlaces(map, mapCenter) {
-  const centerPoint = mapCenter;
-  const service = new google.maps.places.PlacesService(map);
-  const geocoder = new google.maps.Geocoder();
-  const address = '74 Rathdown Park, Terenue, Dublin 6W';
+  let mapBounds = map.getBounds().toJSON();
+  // map.getBounds(): ((53.302753042851606, -6.291490458019325), (53.3067535745927, -6.2870111689644546))
+  // http://localhost:3001/getPrices/53.302753042851606/-6.291490458019325/53.3067535745927/-6.2870111689644546
+  console.log(
+    'http://localhost:3001/getPrices/' +
+      mapBounds.south +
+      '/' +
+      mapBounds.west +
+      '/' +
+      mapBounds.north +
+      '/' +
+      mapBounds.east,
+  );
 
-  let addressCoords = await getPlacesList(geocoder, address);
+  let addressCoords = fetch(
+    'http://localhost:3001/getPrices/' +
+      mapBounds.south +
+      '/' +
+      mapBounds.west +
+      '/' +
+      mapBounds.north +
+      '/' +
+      mapBounds.east,
+  )
+    .then(data => data.json())
+    .then(jsonData => jsonData.soldHouses);
 
   return addressCoords;
 }

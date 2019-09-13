@@ -6,11 +6,16 @@ export async function getPlacesAndUpdateListings(
   mapCenter, // lat, lng object
   searchRadius,
 ) {
-  console.log('2) getPlacesAndUpdateListings starting...');
   let marker;
   let addressCoords = await refreshNearbyPlaces(map, mapCenter);
+  addressCoords.map(house => {
+    addMarkersToMap(
+      { lat: house.lat, lng: house.lng },
+      house.price,
+      this.state.map,
+    );
+  });
   [addressCoords, marker] = addMarkersToMap(addressCoords, map);
 
-  console.log('5) refreshPlacesAndUpdateListings finished');
   return [addressCoords, marker];
 }

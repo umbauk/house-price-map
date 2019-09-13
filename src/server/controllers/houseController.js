@@ -6,6 +6,10 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 exports.index = async (req, res, next) => {
+  res.send(`Reached index. req = ${req}`);
+};
+
+exports.populateCoords = async (req, res, next) => {
   try {
     // find addresses that do not currently have coordinates in the database
     let addresses = await House.find(
@@ -49,6 +53,7 @@ exports.index = async (req, res, next) => {
         );
       }, 25);
     }
+    res.send('Success');
   } catch (error) {
     return next(error);
   }
@@ -58,7 +63,18 @@ exports.getPrices = async (req, res, next) => {
   try {
     let soldHouses = await House.find(
       {
-        postal_code: { $in: ['Dublin 6', 'Dublin 6w'] },
+        // only return addresses that are viewable in current map bounds
+        lat: {
+          $exists: true,
+          $gt: req.params.btmLeftLat,
+          $lt: req.params.upperRightLat,
+        },
+        lng: {
+          $exists: true,
+          $gt: req.params.btmLeftLng,
+          $lt: req.params.upperRightLng,
+        },
+        //postal_code: { $in: ['Dublin 6', 'Dublin 6w'] },
       },
       'lat lng price',
     );

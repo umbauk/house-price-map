@@ -4,24 +4,28 @@ import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
+import { addMarkersToMap } from './api/addMarkersToMap';
 
 /* global google */
 
 /* Bugs:
-
+[ ] Getting 12 invalid lat values in database (lat: not a number)
 */
 
 /* To do:
 [x] display Map
 [x] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
 [x] upload price data to MongoDB
-[ ] write server code
-[ ] connect MongoDB to app
+[x] write server code
+[x] connect MongoDB to app
 [x] collate coords for addresses
-[ ] put all prices on map
+[x] put all prices on map
+[ ] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
+[ ] remove markers when zoom out, add markers when zoom in
+[ ] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties
-[ ] put estimated prices on map for all housesthat don't have price data properties
+[ ] put estimated prices on map for all houses that don't have price data properties
   - find all addresses on street or within certain bounds
 
 
@@ -47,7 +51,6 @@ class App extends Component {
 
     this.initMap = this.initMap.bind(this);
     this.updateListings = this.updateListings.bind(this);
-    this.getDataFromDb = this.getDataFromDb.bind(this);
   }
 
   componentDidMount() {
@@ -61,7 +64,7 @@ class App extends Component {
     );
   }
 
-  initMap() {
+  async initMap() {
     const zoom = 18;
     let map = {};
 
@@ -72,7 +75,7 @@ class App extends Component {
       },
       zoom,
     };
-    map = new google.maps.Map(this.mapElement, mapConfig);
+    map = await new google.maps.Map(this.mapElement, mapConfig);
     map.addListener('dragend', () => this.updateListings());
 
     this.setState({
@@ -83,12 +86,6 @@ class App extends Component {
       },
     });
   }
-
-  getDataFromDb = () => {
-    fetch('http://localhost:3001/getPrices')
-      .then(data => data.json())
-      .then(res => console.log(res));
-  };
 
   async updateListings(searchRadius) {
     try {
@@ -106,8 +103,6 @@ class App extends Component {
         },
         markers: [],
       });
-
-      this.getDataFromDb();
 
       [
         placeLabelsAndUrlArray,

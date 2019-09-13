@@ -1,6 +1,6 @@
 /* global google */
 
-export function addMarkersToMap(addressCoords, map) {
+export function addMarkersToMap(addressCoords, price, map) {
   const image = {
     url: '',
     size: new google.maps.Size(20, 32),
@@ -11,7 +11,7 @@ export function addMarkersToMap(addressCoords, map) {
   const marker = new google.maps.Marker({
     position: addressCoords,
     map: map,
-    label: '€250k',
+    label: '€' + price,
     icon: image, //'./icon.jpg',
   });
 

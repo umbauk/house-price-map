@@ -5,6 +5,7 @@
   "dependencies": {
     "@google/maps": "^0.5.5",
     "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "helmet": "^3.21.0",
     "leaflet": "^1.5.1",

@@ -8,6 +8,7 @@ export async function getPlacesAndUpdateListings(
 ) {
   let marker;
   let addressCoords = await refreshNearbyPlaces(map, mapCenter);
+  console.log(addressCoords);
   addressCoords.map(house => {
     addMarkersToMap(
       { lat: house.lat, lng: house.lng },

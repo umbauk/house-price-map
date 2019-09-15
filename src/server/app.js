@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const compression = require('compression');
 const path = require('path');
 const createError = require('http-errors');
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

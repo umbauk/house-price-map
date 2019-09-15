@@ -6,7 +6,7 @@ const house_controller = require('../controllers/houseController');
 router.get('/', house_controller.index);
 router.get('/populateCoords', house_controller.populateCoords);
 router.get(
-  '/getPrices/:btmLeftLat/:btmLeftLng/:upperRightLat/:UpperRightLng',
+  '/getPrices/:btmLeftLat/:btmLeftLng/:upperRightLat/:upperRightLng',
   house_controller.getPrices,
 );
 

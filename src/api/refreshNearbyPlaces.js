@@ -15,7 +15,8 @@ export async function refreshNearbyPlaces(map, mapCenter) {
       mapBounds.east,
   );
 
-  let addressCoords = fetch(
+  //let addressCoords = await
+  await fetch(
     'http://localhost:3001/getPrices/' +
       mapBounds.south +
       '/' +
@@ -25,10 +26,13 @@ export async function refreshNearbyPlaces(map, mapCenter) {
       '/' +
       mapBounds.east,
   )
-    .then(data => data.json())
-    .then(jsonData => jsonData.soldHouses);
+    .then(data => {
+      console.log(data);
+    })
+    //.then(jsonData => jsonData.soldHouses)
+    .catch(error => console.error(error));
 
-  return addressCoords;
+  //return addressCoords;
 }
 
 export function checkPlaceIsWithinRadius(

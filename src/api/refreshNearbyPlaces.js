@@ -16,23 +16,22 @@ export async function refreshNearbyPlaces(map, mapCenter) {
   );
 
   //let addressCoords = await
-  await fetch(
-    'http://localhost:3001/getPrices/' +
-      mapBounds.south +
-      '/' +
-      mapBounds.west +
-      '/' +
-      mapBounds.north +
-      '/' +
-      mapBounds.east,
-  )
-    .then(data => {
-      console.log(data);
-    })
-    //.then(jsonData => jsonData.soldHouses)
-    .catch(error => console.error(error));
+  try {
+    let addressCoords = await fetch(
+      'http://localhost:3001/getPrices/' +
+        mapBounds.south +
+        '/' +
+        mapBounds.west +
+        '/' +
+        mapBounds.north +
+        '/' +
+        mapBounds.east,
+    );
 
-  //return addressCoords;
+    return await addressCoords.json();
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 export function checkPlaceIsWithinRadius(

@@ -4,7 +4,6 @@ import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
-import { addMarkersToMap } from './api/addMarkersToMap';
 
 /* global google */
 

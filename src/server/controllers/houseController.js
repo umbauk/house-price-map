@@ -63,7 +63,7 @@ exports.getPrices = async (req, res, next) => {
   try {
     // http://localhost:3001/getPrices/53.302753042851606/-6.291490458019325/53.3067535745927/-6.2870111689644546
     console.log('getPrices request received');
-    let soldHouses = await House.find(
+    let propertyDetails = await House.find(
       {
         // only return addresses that are viewable in current map bounds
         lat: {
@@ -81,7 +81,7 @@ exports.getPrices = async (req, res, next) => {
       'lat lng price',
     );
 
-    return res.json({ soldHouses });
+    return res.json({ propertyDetails });
   } catch (error) {
     return next(error);
   }

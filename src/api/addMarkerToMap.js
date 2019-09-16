@@ -1,6 +1,6 @@
 /* global google */
 
-export function addMarkersToMap(addressCoords, price, map) {
+export function addMarkerToMap(addressCoords, price, map) {
   const image = {
     url: '',
     size: new google.maps.Size(20, 32),
@@ -15,5 +15,5 @@ export function addMarkersToMap(addressCoords, price, map) {
     icon: image, //'./icon.jpg',
   });
 
-  return [addressCoords, marker];
+  return marker;
 }

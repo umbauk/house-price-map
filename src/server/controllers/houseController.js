@@ -59,7 +59,6 @@ exports.populateCoords = async (req, res, next) => {
 
 exports.getPrices = async (req, res, next) => {
   try {
-    // http://localhost:3001/getPrices/53.302753042851606/-6.291490458019325/53.3067535745927/-6.2870111689644546
     console.log('getPrices request received');
     let propertyDetails = await House.find(
       {

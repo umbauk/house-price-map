@@ -1,7 +1,7 @@
 /* global google */
 import blackMarker from '../img/black_wide.png';
 
-export function addMarkerToMap(addressCoords, price, map) {
+export function addMarkerToMap(addressCoords, price, map, infowindow) {
   const image = {
     url: blackMarker, //'',
     size: new google.maps.Size(50, 15),
@@ -38,6 +38,10 @@ export function addMarkerToMap(addressCoords, price, map) {
       text: formattedPrice,
     },
     icon: image,
+  });
+
+  marker.addListener('click', () => {
+    infowindow.open(map, marker);
   });
 
   return marker;

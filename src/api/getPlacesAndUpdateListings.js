@@ -21,6 +21,8 @@ export async function getPlacesAndUpdateListings(
     let marker = addMarkerToMap(
       { lat: house.lat, lng: house.lng },
       house.price,
+      house.date_of_sale,
+      house.address,
       map,
       infowindow,
     );

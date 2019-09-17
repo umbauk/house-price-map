@@ -75,7 +75,7 @@ exports.getPrices = async (req, res, next) => {
         },
         //postal_code: { $in: ['Dublin 6', 'Dublin 6w'] },
       },
-      'lat lng price',
+      'lat lng price date_of_sale address',
     );
 
     return res.json({ propertyDetails });

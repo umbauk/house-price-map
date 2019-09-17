@@ -20,7 +20,7 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] put all prices on map
 [x] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
 [ ] remove markers when zoom out, add markers when zoom in
-[ ] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
+[x] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
 [ ] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties

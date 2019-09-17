@@ -1,7 +1,15 @@
 /* global google */
 import blackMarker from '../img/black_wide.png';
+import moment from 'moment';
 
-export function addMarkerToMap(addressCoords, price, map, infowindow) {
+export function addMarkerToMap(
+  addressCoords,
+  price,
+  date_of_sale,
+  address,
+  map,
+  infowindow,
+) {
   const image = {
     url: blackMarker, //'',
     size: new google.maps.Size(50, 15),
@@ -41,6 +49,12 @@ export function addMarkerToMap(addressCoords, price, map, infowindow) {
   });
 
   marker.addListener('click', () => {
+    infowindow.setContent(
+      `<p><b>Address:</b> ${address}</p>` +
+        `<p><b>Date of Sale:</b> ${moment(date_of_sale).format(
+          'DD MMM YYYY',
+        )}</p>`,
+    );
     infowindow.open(map, marker);
   });
 

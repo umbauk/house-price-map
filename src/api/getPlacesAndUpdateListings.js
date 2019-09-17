@@ -4,14 +4,13 @@ import { refreshNearbyPlaces } from './refreshNearbyPlaces.js';
 export async function getPlacesAndUpdateListings(
   map, // Google Map object
   mapCenter, // lat, lng object
-  searchRadius,
 ) {
   let markersArray = [];
 
   let visiblePropertyDetailsArray = await refreshNearbyPlaces(map, mapCenter);
   console.log(visiblePropertyDetailsArray);
 
-  visiblePropertyDetailsArray.propertyDetails.forEach(house => {
+  visiblePropertyDetailsArray.propertyDetails.forEach(async house => {
     let marker = addMarkerToMap(
       { lat: house.lat, lng: house.lng },
       house.price,
@@ -20,5 +19,5 @@ export async function getPlacesAndUpdateListings(
     markersArray.push(marker);
   });
 
-  return [visiblePropertyDetailsArray, markersArray];
+  return markersArray;
 }

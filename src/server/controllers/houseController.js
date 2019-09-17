@@ -15,43 +15,41 @@ exports.populateCoords = async (req, res, next) => {
     let addresses = await House.find(
       {
         lat: { $exists: false },
-        postal_code: '',
-        address: { $regex: /Dublin 6/i },
+        postal_code: 'Dublin 14',
+        //address: { $regex: /Dublin 14/i },
       },
       'address',
       {
-        limit: 1000,
+        limit: 3000,
       },
     );
 
     for (let i = 0; i < addresses.length; i++) {
-      await setTimeout(() => {
-        googleMapsClient.geocode(
-          {
-            address: addresses[i].address,
-          },
-          (err, response) => {
-            if (!err) {
-              console.log(
-                `${i + 1}: ${addresses[i].address}: ${
-                  response.json.results[0].geometry.location.lat
-                }, ${response.json.results[0].geometry.location.lng}`,
-              );
-              House.findOne({ _id: addresses[i]._id }, (err, doc) => {
-                if (err) {
-                  console.log(err);
-                  next(err);
-                } else {
-                  doc.lat = response.json.results[0].geometry.location.lat;
-                  doc.lng = response.json.results[0].geometry.location.lng;
-                  doc.postal_code = 'Dublin 6';
-                  doc.save();
-                }
-              });
-            }
-          },
-        );
-      }, 25);
+      googleMapsClient.geocode(
+        {
+          address: addresses[i].address,
+        },
+        (err, response) => {
+          if (!err) {
+            console.log(
+              `${i + 1}: ${addresses[i].address}: ${
+                response.json.results[0].geometry.location.lat
+              }, ${response.json.results[0].geometry.location.lng}`,
+            );
+            House.findOne({ _id: addresses[i]._id }, (err, doc) => {
+              if (err) {
+                console.log(err);
+                next(err);
+              } else {
+                doc.lat = response.json.results[0].geometry.location.lat;
+                doc.lng = response.json.results[0].geometry.location.lng;
+                doc.postal_code = 'Dublin 14';
+                doc.save();
+              }
+            });
+          }
+        },
+      );
     }
     res.send('Success');
   } catch (error) {

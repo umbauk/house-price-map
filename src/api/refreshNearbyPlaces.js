@@ -2,16 +2,6 @@ export async function refreshNearbyPlaces(map, mapCenter) {
   let mapBounds = map.getBounds().toJSON();
   // map.getBounds(): ((53.302753042851606, -6.291490458019325), (53.3067535745927, -6.2870111689644546))
   // http://localhost:3001/getPrices/53.302753042851606/-6.291490458019325/53.3067535745927/-6.2870111689644546
-  console.log(
-    'http://localhost:3001/getPrices/' +
-      mapBounds.south +
-      '/' +
-      mapBounds.west +
-      '/' +
-      mapBounds.north +
-      '/' +
-      mapBounds.east,
-  );
 
   try {
     let visiblePropertyDetailsArray = await fetch(

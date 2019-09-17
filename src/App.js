@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
-import { getCurrentLocation } from './api/getCurrentLocation';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
 
 /* global google */
 
 /* Bugs:
-[ ] Getting 12 invalid lat values in database (lat: not a number)
+[ ] propertyDetails array seems to have too many results returned
 */
 
 /* To do:
@@ -19,9 +18,10 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] connect MongoDB to app
 [x] collate coords for addresses
 [x] put all prices on map
-[ ] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
+[x] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
 [ ] remove markers when zoom out, add markers when zoom in
 [ ] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
+[ ] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties
 [ ] put estimated prices on map for all houses that don't have price data properties
@@ -43,9 +43,6 @@ class App extends Component {
       },
       map: {},
       markers: [],
-      location: null,
-      locationTextBoxValue: '',
-      locationCoords: null,
     };
 
     this.initMap = this.initMap.bind(this);
@@ -86,9 +83,9 @@ class App extends Component {
     });
   }
 
-  async updateListings(searchRadius) {
+  async updateListings() {
     try {
-      let placeMarkersArray, placeLabelsAndUrlArray;
+      let markersArray;
 
       // clear markers
       this.state.markers.forEach(marker => {
@@ -103,74 +100,18 @@ class App extends Component {
         markers: [],
       });
 
-      [
-        placeLabelsAndUrlArray,
-        placeMarkersArray,
-      ] = await getPlacesAndUpdateListings(
-        this.state.map,
-        {
-          lat: this.state.map.getCenter().lat(),
-          lng: this.state.map.getCenter().lng(),
-        },
-        this.state.searchRadius || searchRadius,
-      );
+      markersArray = await getPlacesAndUpdateListings(this.state.map, {
+        lat: this.state.map.getCenter().lat(),
+        lng: this.state.map.getCenter().lng(),
+      });
 
       this.setState({
-        markers: [...placeMarkersArray],
+        markers: markersArray,
       });
     } catch (error) {
       console.error(error);
     }
   }
-
-  locationTextBoxChanged = evt => {
-    if (!this.state.autoCompleteAddedToTextBox) {
-      this.setState({
-        autoCompleteAddedToTextBox: true,
-      });
-      const input = document.getElementById('locationTextBox');
-      this.autocomplete = new google.maps.places.Autocomplete(input);
-      this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
-    }
-    this.setState({
-      locationTextBoxValue: evt.target.value,
-    });
-  };
-
-  handlePlaceSelect = () => {
-    // when place selected from dropdown box, add coordinates of selected place to state
-    if (this.autocomplete.getPlace().geometry) {
-      this.setState({
-        locationCoords: this.autocomplete.getPlace().geometry.location,
-      });
-    }
-  };
-
-  locationBtnClicked = async evt => {
-    const map = this.state.map;
-    const centerCoords = await this.getCenterCoords(evt, map);
-
-    this.setState({
-      location: 1,
-    });
-    map.panTo(centerCoords);
-    map.setCenter(centerCoords);
-    map.setZoom(13);
-  };
-
-  getCenterCoords = (evt, map) => {
-    return new Promise(async (resolve, reject) => {
-      //let centerCoords;
-      if (evt.target.name === 'useCurrentLocation') {
-        resolve(await getCurrentLocation());
-      } else if (!this.state.locationCoords) {
-        // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
-        resolve(1);
-      } else {
-        resolve(this.state.locationCoords);
-      }
-    });
-  };
 
   render() {
     return (

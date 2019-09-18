@@ -1,5 +1,5 @@
 /* global google */
-import { addMarkerToMap } from './addMarkerToMap.js';
+import { addMarkerToMap, addDuplicateMarkerToMap } from './addMarkerToMap.js';
 import { refreshNearbyPlaces } from './refreshNearbyPlaces.js';
 
 export async function getPlacesAndUpdateListings(
@@ -9,20 +9,36 @@ export async function getPlacesAndUpdateListings(
   let markersArray = [];
 
   let visiblePropertyDetailsArray = await refreshNearbyPlaces(map, mapCenter);
-  console.log(visiblePropertyDetailsArray);
+
+  let [
+    deDupedPropertyDetailsArray,
+    duplicatesPropertyDetailsArray,
+  ] = deDupeProperties(visiblePropertyDetailsArray.propertyDetails);
+  console.log(deDupedPropertyDetailsArray);
+  console.log(duplicatesPropertyDetailsArray);
 
   const infowindow = new google.maps.InfoWindow({
-    content:
-      '<p><b>Date:</b> 1 Jan 2019</p>' +
-      '<p><b>Address:</b> 74 Rathdown Park, Terenure, Dublin</p>',
+    content: '',
   });
 
-  visiblePropertyDetailsArray.propertyDetails.forEach(async house => {
+  deDupedPropertyDetailsArray.forEach(async property => {
     let marker = addMarkerToMap(
-      { lat: house.lat, lng: house.lng },
-      house.price,
-      house.date_of_sale,
-      house.address,
+      { lat: property.lat, lng: property.lng },
+      property.price,
+      property.date_of_sale,
+      property.address,
+      map,
+      infowindow,
+    );
+    markersArray.push(marker);
+  });
+
+  duplicatesPropertyDetailsArray.forEach(async property => {
+    let marker = addDuplicateMarkerToMap(
+      { lat: property.lat, lng: property.lng },
+      property.price,
+      property.date_of_sale,
+      property.address,
       map,
       infowindow,
     );
@@ -30,4 +46,37 @@ export async function getPlacesAndUpdateListings(
   });
 
   return markersArray;
+}
+
+function deDupeProperties(visiblePropertyDetailsArray) {
+  // sort by lat and lng
+  visiblePropertyDetailsArray.sort((a, b) => a.lat - b.lat || a.lng - b.lng);
+  let duplicatePropertyDetailsArray = [];
+
+  for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
+    if (
+      visiblePropertyDetailsArray[i].lat ===
+        visiblePropertyDetailsArray[i + 1].lat &&
+      visiblePropertyDetailsArray[i].lng ===
+        visiblePropertyDetailsArray[i + 1].lng
+    ) {
+      visiblePropertyDetailsArray[i].duplicate = true;
+      visiblePropertyDetailsArray[i + 1].duplicate = true;
+    }
+  }
+
+  for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
+    // if there are duplciates of same property in array, remove them to a new array
+    if (visiblePropertyDetailsArray[i].duplicate) {
+      duplicatePropertyDetailsArray.push(
+        visiblePropertyDetailsArray.splice(i, 1),
+      );
+      i--;
+    }
+  }
+
+  return [
+    visiblePropertyDetailsArray,
+    [].concat(...duplicatePropertyDetailsArray),
+  ];
 }

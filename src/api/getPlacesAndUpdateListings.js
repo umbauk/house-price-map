@@ -10,10 +10,7 @@ export async function getPlacesAndUpdateListings(
 
   let visiblePropertyDetailsArray = await refreshNearbyPlaces(map, mapCenter);
 
-  let [
-    deDupedPropertyDetailsArray,
-    duplicatesPropertyDetailsArray,
-  ] = deDupeProperties(visiblePropertyDetailsArray.propertyDetails);
+  let [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray] = deDupeProperties(visiblePropertyDetailsArray.propertyDetails);
   console.log(deDupedPropertyDetailsArray);
   console.log(duplicatesPropertyDetailsArray);
 
@@ -22,14 +19,7 @@ export async function getPlacesAndUpdateListings(
   });
 
   deDupedPropertyDetailsArray.forEach(async property => {
-    let marker = addMarkerToMap(
-      { lat: property.lat, lng: property.lng },
-      property.price,
-      property.date_of_sale,
-      property.address,
-      map,
-      infowindow,
-    );
+    let marker = addMarkerToMap({ lat: property.lat, lng: property.lng }, property.price, property.date_of_sale, property.address, map, infowindow);
     markersArray.push(marker);
   });
 
@@ -54,10 +44,8 @@ function deDupeProperties(visiblePropertyDetailsArray) {
 
   for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
     if (
-      visiblePropertyDetailsArray[i].lat ===
-        visiblePropertyDetailsArray[i + 1].lat &&
-      visiblePropertyDetailsArray[i].lng ===
-        visiblePropertyDetailsArray[i + 1].lng
+      visiblePropertyDetailsArray[i].lat === visiblePropertyDetailsArray[i + 1].lat &&
+      visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[i + 1].lng
     ) {
       visiblePropertyDetailsArray[i].duplicate = true;
       visiblePropertyDetailsArray[i + 1].duplicate = true;
@@ -72,35 +60,24 @@ function deDupeProperties(visiblePropertyDetailsArray) {
     // if there are duplicates of same property in array, remove them to a new array
     if (visiblePropertyDetailsArray[i].duplicate) {
       duplicatesPropertyDetailsArray[duplicateCount] = [];
-      duplicatesPropertyDetailsArray[duplicateCount].push(
-        visiblePropertyDetailsArray[i],
-      );
+      duplicatesPropertyDetailsArray[duplicateCount].push(visiblePropertyDetailsArray[i]);
 
-      for (let j = i + 1; j < visiblePropertyDetailsArray.length; j++) {
-        // TODO: turn into While loop
-        if (
-          visiblePropertyDetailsArray[i].lat ===
-            visiblePropertyDetailsArray[j].lat &&
-          visiblePropertyDetailsArray[i].lng ===
-            visiblePropertyDetailsArray[j].lng
-        ) {
-          duplicatesPropertyDetailsArray[duplicateCount].push(
-            visiblePropertyDetailsArray[j],
-          );
-          duplicateRowCount++;
-        }
+      let j = i + 1;
+      while (
+        visiblePropertyDetailsArray[i].lat === visiblePropertyDetailsArray[j].lat &&
+        visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[j].lng
+      ) {
+        duplicatesPropertyDetailsArray[duplicateCount].push(visiblePropertyDetailsArray[j]);
+        duplicateRowCount++;
+        j++;
       }
+
       i += duplicateRowCount;
       duplicateCount++;
     }
   }
 
-  let deDupedPropertyDetailsArray = visiblePropertyDetailsArray.filter(
-    property => !property.duplicate,
-  );
+  let deDupedPropertyDetailsArray = visiblePropertyDetailsArray.filter(property => !property.duplicate);
 
-  return [
-    deDupedPropertyDetailsArray,
-    [].concat(...duplicatesPropertyDetailsArray),
-  ];
+  return [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray];
 }

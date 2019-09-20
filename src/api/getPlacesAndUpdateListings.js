@@ -23,17 +23,10 @@ export async function getPlacesAndUpdateListings(
     markersArray.push(marker);
   });
 
-  /*duplicatesPropertyDetailsArray.forEach(async property => {
-    let marker = addDuplicateMarkerToMap(
-      { lat: property.lat, lng: property.lng },
-      property.price,
-      property.date_of_sale,
-      property.address,
-      map,
-      infowindow,
-    );
+  duplicatesPropertyDetailsArray.forEach(async property => {
+    let marker = addDuplicateMarkerToMap(property, map, infowindow);
     markersArray.push(marker);
-  });*/
+  });
 
   return markersArray;
 }
@@ -54,25 +47,28 @@ function deDupeProperties(visiblePropertyDetailsArray) {
 
   let duplicatesPropertyDetailsArray = [];
   let duplicateCount = 0;
-  let duplicateRowCount = 0;
 
-  for (let i = 0; i < visiblePropertyDetailsArray.length; i++) {
+  for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
     // if there are duplicates of same property in array, remove them to a new array
     if (visiblePropertyDetailsArray[i].duplicate) {
+      let duplicateRowCount = 0;
       duplicatesPropertyDetailsArray[duplicateCount] = [];
       duplicatesPropertyDetailsArray[duplicateCount].push(visiblePropertyDetailsArray[i]);
 
       let j = i + 1;
       while (
         visiblePropertyDetailsArray[i].lat === visiblePropertyDetailsArray[j].lat &&
-        visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[j].lng
+        visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[j].lng &&
+        j < visiblePropertyDetailsArray.length
       ) {
         duplicatesPropertyDetailsArray[duplicateCount].push(visiblePropertyDetailsArray[j]);
         duplicateRowCount++;
-        j++;
+        if (j >= visiblePropertyDetailsArray.length - 1) {
+          break;
+        } else j++;
       }
 
-      i += duplicateRowCount;
+      i += duplicateRowCount; // skips the matching duplicates
       duplicateCount++;
     }
   }

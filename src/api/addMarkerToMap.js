@@ -2,14 +2,7 @@
 import blackMarker from '../img/black_wide.png';
 import moment from 'moment';
 
-export function addMarkerToMap(
-  addressCoords,
-  price,
-  date_of_sale,
-  address,
-  map,
-  infowindow,
-) {
+export function addMarkerToMap(addressCoords, price, date_of_sale, address, map, infowindow) {
   const image = {
     url: blackMarker, //'',
     size: new google.maps.Size(50, 15),
@@ -49,26 +42,14 @@ export function addMarkerToMap(
   });
 
   marker.addListener('click', () => {
-    infowindow.setContent(
-      `<p><b>Address:</b> ${address}</p>` +
-        `<p><b>Date of Sale:</b> ${moment(date_of_sale).format(
-          'DD MMM YYYY',
-        )}</p>`,
-    );
+    infowindow.setContent(`<p><b>Address:</b> ${address}</p>` + `<p><b>Date of Sale:</b> ${moment(date_of_sale).format('DD MMM YYYY')}</p>`);
     infowindow.open(map, marker);
   });
 
   return marker;
 }
 
-export function addDuplicateMarkerToMap(
-  addressCoords,
-  price,
-  date_of_sale,
-  address,
-  map,
-  infowindow,
-) {
+export function addDuplicateMarkerToMap(property, map, infowindow) {
   const image = {
     url: blackMarker, //'',
     size: new google.maps.Size(50, 15),
@@ -76,44 +57,62 @@ export function addDuplicateMarkerToMap(
     anchor: new google.maps.Point(20, 20),
   };
 
-  let formattedPrice;
+  let formattedPrice = [];
   // if price > 1m then format as millions, else as thousands
-  if (price >= 1000000) {
-    formattedPrice =
-      new Intl.NumberFormat('en-IE', {
-        style: 'currency',
-        currency: 'EUR',
-        maximumFractionDigits: 2,
-      }).format(price / 1000000) + 'm';
-  } else {
-    formattedPrice =
-      new Intl.NumberFormat('en-IE', {
-        style: 'currency',
-        currency: 'EUR',
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
-      }).format(price / 1000) + 'k';
-  }
+  property.forEach((sale, index) => {
+    if (sale.price >= 1000000) {
+      formattedPrice[index] =
+        new Intl.NumberFormat('en-IE', {
+          style: 'currency',
+          currency: 'EUR',
+          maximumFractionDigits: 2,
+        }).format(sale.price / 1000000) + 'm';
+    } else {
+      formattedPrice[index] =
+        new Intl.NumberFormat('en-IE', {
+          style: 'currency',
+          currency: 'EUR',
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0,
+        }).format(sale.price / 1000) + 'k';
+    }
+  });
 
   const marker = new google.maps.Marker({
-    position: addressCoords,
+    position: { lat: property[0].lat, lng: property[0].lng },
     map: map,
     label: {
       color: 'white',
       fontWeight: 'bold',
       fontSize: '12px',
-      text: formattedPrice,
+      text: 'Click',
     },
     icon: image,
   });
 
+  let infoWindowContent = '';
+  // If all addresses in the array are equal then this is a house with multiple sales
+  // If all addresses in the array are not equal then this is an apartment block with multiple different addresses
+  if (property.every(sale => sale.address === property[0].address)) {
+    // House
+    infoWindowContent = `<p><b>Address:</b> ${property[0].address}</p>`;
+    property.forEach((sale, index) => {
+      infoWindowContent += `<b>${moment(sale.date_of_sale).format('DD MMM YYYY')}</b> - ${formattedPrice[index]}<br>`;
+    });
+  } else {
+    // Apartments
+    infoWindowContent += `<table><thead><tr><td><b>Date of Sale</b></td><td><b>Address</b></td><td><b>Sale Price</b></td></tr></thead>
+      <tbody>`;
+    property.forEach((sale, index) => {
+      infoWindowContent += `<tr><td>${moment(sale.date_of_sale).format('DD MMM YYYY')}</td> <td>${property[index].address}</td> <td>${
+        formattedPrice[index]
+      }</td></tr>`;
+    });
+    infoWindowContent += `</tbody></table>`;
+  }
+
   marker.addListener('click', () => {
-    infowindow.setContent(
-      `<p><b>Address:</b> ${address}</p>` +
-        `<p><b>Date of Sale:</b> ${moment(date_of_sale).format(
-          'DD MMM YYYY',
-        )}</p>`,
-    );
+    infowindow.setContent(infoWindowContent);
     infowindow.open(map, marker);
   });
 

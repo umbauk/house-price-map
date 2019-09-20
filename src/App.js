@@ -55,9 +55,7 @@ class App extends Component {
     window.initMap = this.initMap;
     // Asynchronously load the Google Maps script, passing in the callback reference
     const KEY = Config.passwords.GOOGLE_API_KEY;
-    loadJS(
-      `https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`,
-    );
+    loadJS(`https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`);
   }
 
   async initMap() {
@@ -100,14 +98,17 @@ class App extends Component {
         markers: [],
       });
 
-      markersArray = await getPlacesAndUpdateListings(this.state.map, {
-        lat: this.state.map.getCenter().lat(),
-        lng: this.state.map.getCenter().lng(),
-      });
+      console.log(this.state.map.getZoom());
+      if (this.state.map.getZoom() >= 17) {
+        markersArray = await getPlacesAndUpdateListings(this.state.map, {
+          lat: this.state.map.getCenter().lat(),
+          lng: this.state.map.getCenter().lng(),
+        });
 
-      this.setState({
-        markers: markersArray,
-      });
+        this.setState({
+          markers: markersArray,
+        });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -116,10 +117,7 @@ class App extends Component {
   render() {
     return (
       <div id='parent-window'>
-        <div
-          id='map-element'
-          ref={mapElement => (this.mapElement = mapElement)}
-        />
+        <div id='map-element' ref={mapElement => (this.mapElement = mapElement)} />
       </div>
     );
   }

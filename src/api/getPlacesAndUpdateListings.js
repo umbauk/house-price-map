@@ -33,7 +33,7 @@ export async function getPlacesAndUpdateListings(
     markersArray.push(marker);
   });
 
-  duplicatesPropertyDetailsArray.forEach(async property => {
+  /*duplicatesPropertyDetailsArray.forEach(async property => {
     let marker = addDuplicateMarkerToMap(
       { lat: property.lat, lng: property.lng },
       property.price,
@@ -43,7 +43,7 @@ export async function getPlacesAndUpdateListings(
       infowindow,
     );
     markersArray.push(marker);
-  });
+  });*/
 
   return markersArray;
 }
@@ -51,7 +51,6 @@ export async function getPlacesAndUpdateListings(
 function deDupeProperties(visiblePropertyDetailsArray) {
   // sort by lat and lng
   visiblePropertyDetailsArray.sort((a, b) => a.lat - b.lat || a.lng - b.lng);
-  let duplicatePropertyDetailsArray = [];
 
   for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
     if (
@@ -65,18 +64,43 @@ function deDupeProperties(visiblePropertyDetailsArray) {
     }
   }
 
-  for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
-    // if there are duplciates of same property in array, remove them to a new array
+  let duplicatesPropertyDetailsArray = [];
+  let duplicateCount = 0;
+  let duplicateRowCount = 0;
+
+  for (let i = 0; i < visiblePropertyDetailsArray.length; i++) {
+    // if there are duplicates of same property in array, remove them to a new array
     if (visiblePropertyDetailsArray[i].duplicate) {
-      duplicatePropertyDetailsArray.push(
-        visiblePropertyDetailsArray.splice(i, 1),
+      duplicatesPropertyDetailsArray[duplicateCount] = [];
+      duplicatesPropertyDetailsArray[duplicateCount].push(
+        visiblePropertyDetailsArray[i],
       );
-      i--;
+
+      for (let j = i + 1; j < visiblePropertyDetailsArray.length; j++) {
+        // TODO: turn into While loop
+        if (
+          visiblePropertyDetailsArray[i].lat ===
+            visiblePropertyDetailsArray[j].lat &&
+          visiblePropertyDetailsArray[i].lng ===
+            visiblePropertyDetailsArray[j].lng
+        ) {
+          duplicatesPropertyDetailsArray[duplicateCount].push(
+            visiblePropertyDetailsArray[j],
+          );
+          duplicateRowCount++;
+        }
+      }
+      i += duplicateRowCount;
+      duplicateCount++;
     }
   }
 
+  let deDupedPropertyDetailsArray = visiblePropertyDetailsArray.filter(
+    property => !property.duplicate,
+  );
+
   return [
-    visiblePropertyDetailsArray,
-    [].concat(...duplicatePropertyDetailsArray),
+    deDupedPropertyDetailsArray,
+    [].concat(...duplicatesPropertyDetailsArray),
   ];
 }

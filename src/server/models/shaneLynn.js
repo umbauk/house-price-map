@@ -2,25 +2,21 @@ const mongoose = require('mongoose');
 //const moment = require('moment');
 const Schema = mongoose.Schema;
 
-let HouseSchema = new Schema(
+let ShaneLynnSchema = new Schema(
   {
     date_of_sale: { type: Date, required: true }, //dd/mm/yyyy
     address: { type: String, required: true },
     postal_code: { type: String },
-    county: { type: String },
+    ppr_county: { type: String },
     price: { type: Number },
     not_full_market_price: { type: String, enum: ['Yes', 'No'] },
     vat_exclusive: { type: String, enum: ['Yes', 'No'] },
     description_of_property: { type: String },
     property_size_description: { type: String },
-    lat: { type: Number },
-    lng: { type: Number },
+    latitude: { type: Number },
+    longitude: { type: Number },
   },
-  { collection: 'dublin_flattened' },
+  { collection: 'shane_lynn_dump' },
 );
 
-HouseSchema.virtual('estimated_current_price').get(function() {
-  return this.price; // this.price * price index for this.date_of_sale month/year
-});
-
-module.exports = mongoose.model('House', HouseSchema);
+module.exports = mongoose.model('ShaneLynn', ShaneLynnSchema);

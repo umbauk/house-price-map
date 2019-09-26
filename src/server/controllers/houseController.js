@@ -1,4 +1,5 @@
 const House = require('../models/house');
+const ShaneLynn = require('../models/shaneLynn');
 //const moment = require('moment');
 require('dotenv').config();
 const googleMapsClient = require('@google/maps').createClient({
@@ -14,13 +15,13 @@ exports.populateCoords = async (req, res, next) => {
     // find addresses that do not currently have coordinates in the database
     let addresses = await House.find(
       {
-        lat: { $exists: false },
-        postal_code: 'Dublin 14',
+        lat: { $eq: '' },
+        //postal_code: 'Dublin 14',
         //address: { $regex: /Dublin 14/i },
       },
       'address',
       {
-        limit: 3000,
+        limit: 1,
       },
     );
 

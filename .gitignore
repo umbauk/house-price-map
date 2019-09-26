@@ -20,6 +20,8 @@
 .env.production.local
 config.js
 PPR_dublin_master.csv
+/db
+mongoDb.js
 
 npm-debug.log*
 yarn-debug.log*

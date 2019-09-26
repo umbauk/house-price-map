@@ -4,6 +4,7 @@ import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
 
+// db.shane_lynn_dump.aggregate([ { $match: {} }, { $unset: "_id" }, { $merge: { into: db.dublin, on: [ "date_of_sale", "address" ] } } ])
 /* global google */
 
 /* Bugs:
@@ -19,9 +20,10 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] collate coords for addresses
 [x] put all prices on map
 [x] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
-[ ] remove markers when zoom out, add markers when zoom in
+[x] remove markers when zoom out, add markers when zoom in
 [x] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
-[ ] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
+[x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
+[ ] populate coordinates from shanelynn.ie data
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties
 [ ] put estimated prices on map for all houses that don't have price data properties

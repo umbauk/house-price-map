@@ -6,6 +6,8 @@ export async function lookupPlaceName(map, placeToLookup, currentMapCenter) {
     service.textSearch(
       {
         query: placeToLookup,
+        location: new google.maps.LatLng(53.3419176, -6.2677217),
+        radius: 20000,
       },
       (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {

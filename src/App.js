@@ -54,6 +54,7 @@ class App extends Component {
 
     this.initMap = this.initMap.bind(this);
     this.updateListings = this.updateListings.bind(this);
+    this.keyPress = this.keyPress.bind(this);
   }
 
   async componentDidMount() {
@@ -146,6 +147,10 @@ class App extends Component {
     }
   };
 
+  keyPress = evt => {
+    if (evt.keyCode === 13) this.locationBtnClicked(evt);
+  };
+
   locationBtnClicked = async evt => {
     const map = this.state.map;
     const centerCoords = await this.getCenterCoords(evt, map);
@@ -187,9 +192,11 @@ class App extends Component {
               <CardText>Where do you want to search?</CardText>
               <Input
                 type='text'
+                spellCheck='false'
                 name='location'
                 id='locationTextBox'
                 placeholder=''
+                onKeyDown={this.keyPress}
                 onChange={this.locationTextBoxChanged}
               />
               <Button className='button' onClick={this.locationBtnClicked} name='location'>

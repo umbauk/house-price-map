@@ -45,8 +45,10 @@ function deDupeProperties(visiblePropertyDetailsArray) {
 
   for (let i = 0; i < visiblePropertyDetailsArray.length - 1; i++) {
     if (
-      visiblePropertyDetailsArray[i].lat === visiblePropertyDetailsArray[i + 1].lat &&
-      visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[i + 1].lng
+      visiblePropertyDetailsArray[i].lat <= visiblePropertyDetailsArray[i + 1].lat + 0.00008 &&
+      visiblePropertyDetailsArray[i].lat >= visiblePropertyDetailsArray[i + 1].lat - 0.00008 &&
+      visiblePropertyDetailsArray[i].lng <= visiblePropertyDetailsArray[i + 1].lng + 0.00008 &&
+      visiblePropertyDetailsArray[i].lng >= visiblePropertyDetailsArray[i + 1].lng - 0.00008
     ) {
       visiblePropertyDetailsArray[i].duplicate = true;
       visiblePropertyDetailsArray[i + 1].duplicate = true;
@@ -65,8 +67,10 @@ function deDupeProperties(visiblePropertyDetailsArray) {
 
       let j = i + 1;
       while (
-        visiblePropertyDetailsArray[i].lat === visiblePropertyDetailsArray[j].lat &&
-        visiblePropertyDetailsArray[i].lng === visiblePropertyDetailsArray[j].lng &&
+        visiblePropertyDetailsArray[i].lat <= visiblePropertyDetailsArray[j].lat + 0.00008 &&
+        visiblePropertyDetailsArray[i].lat >= visiblePropertyDetailsArray[j].lat - 0.00008 &&
+        visiblePropertyDetailsArray[i].lng <= visiblePropertyDetailsArray[j].lng + 0.00008 &&
+        visiblePropertyDetailsArray[i].lng >= visiblePropertyDetailsArray[j].lng - 0.00008 &&
         j < visiblePropertyDetailsArray.length
       ) {
         duplicatesPropertyDetailsArray[duplicateCount].push(visiblePropertyDetailsArray[j]);

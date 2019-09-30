@@ -23,7 +23,8 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] remove markers when zoom out, add markers when zoom in
 [x] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
 [x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
-[ ] populate coordinates from shanelynn.ie data
+[x] populate coordinates from shanelynn.ie data
+[ ] Add text box for users to search for address
 [ ] calculate today prices of properties
 [ ] handle VAT on new properties
 [ ] put estimated prices on map for all houses that don't have price data properties
@@ -74,17 +75,23 @@ class App extends Component {
     map = await new google.maps.Map(this.mapElement, mapConfig);
     map.addListener('dragend', () => this.updateListings());
 
-    this.setState({
-      map: map,
-      center: {
-        lat: map.getCenter().lat(),
-        lng: map.getCenter().lng(),
+    this.setState(
+      {
+        map: map,
+        center: {
+          lat: map.getCenter().lat(),
+          lng: map.getCenter().lng(),
+        },
       },
-    });
+      () => {
+        this.updateListings();
+      },
+    );
   }
 
   async updateListings() {
     try {
+      console.log('updateListings() running...');
       let markersArray;
 
       // clear markers
@@ -100,12 +107,9 @@ class App extends Component {
         markers: [],
       });
 
-      console.log(this.state.map.getZoom());
+      // only display results when map zoomed in enough
       if (this.state.map.getZoom() >= 17) {
-        markersArray = await getPlacesAndUpdateListings(this.state.map, {
-          lat: this.state.map.getCenter().lat(),
-          lng: this.state.map.getCenter().lng(),
-        });
+        markersArray = await getPlacesAndUpdateListings(this.state.map);
 
         this.setState({
           markers: markersArray,

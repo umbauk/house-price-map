@@ -15,6 +15,7 @@ exports.populateCoords = async (req, res, next) => {
     let addresses = await House.find(
       {
         lat: { $exists: false },
+        date_of_sale: { $regex: /2018$|2019$/ },
         //postal_code: 'Dublin 14',
         //address: { $regex: /Dublin 14/i },
       },
@@ -23,29 +24,36 @@ exports.populateCoords = async (req, res, next) => {
         limit: 1000,
       },
     );
-    console.log(addresses);
 
     for (let i = 0; i < addresses.length; i++) {
-      googleMapsClient.geocode(
+      await googleMapsClient.geocode(
         {
           address: addresses[i].address,
         },
         (err, response) => {
-          if (err) console.log(err);
-          else {
-            console.log(
-              `${i + 1}: ${addresses[i].address}: ${
-                response.json.results[0].geometry.location.lat
-              }, ${response.json.results[0].geometry.location.lng}`,
-            );
+          if (err) {
+            console.log(err);
+          } else {
             House.findOne({ _id: addresses[i]._id }, (err, doc) => {
               if (err) {
                 console.log(err);
                 next(err);
+              } else if (response.json.status !== 'OK') {
+                console.log(`ERROR: ${response.json.status} - ${addresses[i].address}`);
+                if (response.json.status === 'ZERO_RESULTS') {
+                  console.log(`${i + 1}: ${addresses[i].address}: ${response.json.status}`);
+                  doc.lat = 0;
+                  doc.lng = 0;
+                  doc.save();
+                }
               } else {
+                console.log(
+                  `${i + 1}: ${addresses[i].address}: ${
+                    response.json.results[0].geometry.location.lat
+                  }, ${response.json.results[0].geometry.location.lng}`,
+                );
                 doc.lat = response.json.results[0].geometry.location.lat;
                 doc.lng = response.json.results[0].geometry.location.lng;
-                doc.postal_code = 'Dublin 14';
                 doc.save();
               }
             });

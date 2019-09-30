@@ -4,13 +4,14 @@ import { refreshNearbyPlaces } from './refreshNearbyPlaces.js';
 
 export async function getPlacesAndUpdateListings(
   map, // Google Map object
-  mapCenter, // lat, lng object
 ) {
   let markersArray = [];
 
-  let visiblePropertyDetailsArray = await refreshNearbyPlaces(map, mapCenter);
+  let visiblePropertyDetailsArray = await refreshNearbyPlaces(map);
 
-  let [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray] = deDupeProperties(visiblePropertyDetailsArray.propertyDetails);
+  let [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray] = deDupeProperties(
+    visiblePropertyDetailsArray.propertyDetails,
+  );
   console.log(deDupedPropertyDetailsArray);
   console.log(duplicatesPropertyDetailsArray);
 
@@ -19,7 +20,14 @@ export async function getPlacesAndUpdateListings(
   });
 
   deDupedPropertyDetailsArray.forEach(async property => {
-    let marker = addMarkerToMap({ lat: property.lat, lng: property.lng }, property.price, property.date_of_sale, property.address, map, infowindow);
+    let marker = addMarkerToMap(
+      { lat: property.lat, lng: property.lng },
+      property.price,
+      property.date_of_sale,
+      property.address,
+      map,
+      infowindow,
+    );
     markersArray.push(marker);
   });
 
@@ -73,7 +81,9 @@ function deDupeProperties(visiblePropertyDetailsArray) {
     }
   }
 
-  let deDupedPropertyDetailsArray = visiblePropertyDetailsArray.filter(property => !property.duplicate);
+  let deDupedPropertyDetailsArray = visiblePropertyDetailsArray.filter(
+    property => !property.duplicate,
+  );
 
   return [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray];
 }

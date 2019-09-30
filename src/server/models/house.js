@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 let HouseSchema = new Schema(
   {
-    date_of_sale: { type: Date, required: true }, //dd/mm/yyyy
+    date_of_sale: { type: String, required: true }, //dd/mm/yyyy
     address: { type: String, required: true },
     postal_code: { type: String },
     county: { type: String },

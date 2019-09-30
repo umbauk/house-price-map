@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
+import { getCurrentLocation } from './api/getCurrentLocation';
+import { lookupPlaceName } from './api/lookupPlaceName';
 import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
+import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 
 // db.shane_lynn_dump.aggregate([ { $match: {} }, { $unset: "_id" }, { $merge: { into: db.dublin, on: [ "date_of_sale", "address" ] } } ])
 /* global google */
@@ -24,8 +27,9 @@ import loadJS from './loadJS.js'; // loads Google Maps API script
 [x] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
 [x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
 [x] populate coordinates from shanelynn.ie data
-[ ] Add text box for users to search for address
-[ ] calculate today prices of properties
+[x] Add text box for users to search for address
+[ ] Add FAQ / Info button and pop up
+[ ] calculate today prices of properties, Add toggle button to convert all prices to today's prices
 [ ] handle VAT on new properties
 [ ] put estimated prices on map for all houses that don't have price data properties
   - find all addresses on street or within certain bounds
@@ -41,8 +45,8 @@ class App extends Component {
 
     this.state = {
       center: {
-        lat: 53.304779,
-        lng: -6.289283,
+        lat: 53.3419176,
+        lng: -6.2677217,
       },
       map: {},
       markers: [],
@@ -52,41 +56,38 @@ class App extends Component {
     this.updateListings = this.updateListings.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Connect the initMap() function within this class to the global window context,
     // so Google Maps can invoke it
     window.initMap = this.initMap;
     // Asynchronously load the Google Maps script, passing in the callback reference
     const KEY = Config.passwords.GOOGLE_API_KEY;
-    loadJS(`https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`);
+    await loadJS(
+      `https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`,
+    );
   }
 
   async initMap() {
-    const zoom = 18;
+    const zoom = 12;
     let map = {};
 
     let mapConfig = {
       center: {
-        lat: 53.304779,
-        lng: -6.289283,
+        lat: 53.3419176,
+        lng: -6.2677217,
       },
       zoom,
     };
     map = await new google.maps.Map(this.mapElement, mapConfig);
     map.addListener('dragend', () => this.updateListings());
 
-    this.setState(
-      {
-        map: map,
-        center: {
-          lat: map.getCenter().lat(),
-          lng: map.getCenter().lng(),
-        },
+    this.setState({
+      map: map,
+      center: {
+        lat: map.getCenter().lat(),
+        lng: map.getCenter().lng(),
       },
-      () => {
-        this.updateListings();
-      },
-    );
+    });
   }
 
   async updateListings() {
@@ -109,6 +110,7 @@ class App extends Component {
 
       // only display results when map zoomed in enough
       if (this.state.map.getZoom() >= 17) {
+        console.log(this.state.map);
         markersArray = await getPlacesAndUpdateListings(this.state.map);
 
         this.setState({
@@ -120,10 +122,89 @@ class App extends Component {
     }
   }
 
+  locationTextBoxChanged = evt => {
+    if (!this.state.autoCompleteAddedToTextBox) {
+      this.setState({
+        autoCompleteAddedToTextBox: true,
+      });
+      const input = document.getElementById('locationTextBox');
+      const options = { types: ['address'], componentRestrictions: { country: 'ie' } };
+      this.autocomplete = new google.maps.places.Autocomplete(input, options);
+      this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
+    }
+    this.setState({
+      locationTextBoxValue: evt.target.value,
+    });
+  };
+
+  handlePlaceSelect = () => {
+    // when place selected from dropdown box, add coordinates of selected place to state
+    if (this.autocomplete.getPlace().geometry) {
+      this.setState({
+        locationCoords: this.autocomplete.getPlace().geometry.location,
+      });
+    }
+  };
+
+  locationBtnClicked = async evt => {
+    const map = this.state.map;
+    const centerCoords = await this.getCenterCoords(evt, map);
+
+    map.panTo(centerCoords);
+    map.setCenter(centerCoords);
+    map.setZoom(18);
+    this.updateListings();
+  };
+
+  getCenterCoords = (evt, map) => {
+    return new Promise(async (resolve, reject) => {
+      if (evt.target.name === 'useCurrentLocation') {
+        resolve(await getCurrentLocation());
+      } else if (!this.state.locationCoords) {
+        // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
+        resolve(
+          await lookupPlaceName(
+            map,
+            this.state.locationTextBoxValue,
+            this.state.center, // default value
+          ),
+        );
+      } else {
+        resolve(this.state.locationCoords);
+      }
+    });
+  };
+
   render() {
     return (
       <div id='parent-window'>
         <div id='map-element' ref={mapElement => (this.mapElement = mapElement)} />
+
+        <div id='cardtable-container'>
+          <Card id='welcome-card'>
+            <CardBody>
+              <CardTitle>Welcome to Dublin House Price Map</CardTitle>
+              <CardText>Where do you want to search?</CardText>
+              <Input
+                type='text'
+                name='location'
+                id='locationTextBox'
+                placeholder=''
+                onChange={this.locationTextBoxChanged}
+              />
+              <Button className='button' onClick={this.locationBtnClicked} name='location'>
+                Submit
+              </Button>
+              <Button
+                className='button'
+                onClick={this.locationBtnClicked}
+                name='useCurrentLocation'
+              >
+                Use current location
+              </Button>
+            </CardBody>
+          </Card>
+        </div>
       </div>
     );
   }

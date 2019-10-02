@@ -15,7 +15,7 @@ exports.populateCoords = async (req, res, next) => {
     let addresses = await House.find(
       {
         lat: { $exists: false },
-        date_of_sale: { $regex: /2018$|2019$/ },
+        //date_of_sale: { $regex: /2010$/ },
         //postal_code: 'Dublin 14',
         //address: { $regex: /Dublin 14/i },
       },

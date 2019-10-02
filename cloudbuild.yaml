@@ -1,6 +1,12 @@
 steps:
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
+  - name: 'gcr.io/$PROJECT_ID/ls'
+  - name: 'gcr.io/$PROJECT_ID/gcloud'
+    args:
+      [
+        'gcloud kms decrypt --location global --keyring everyones-happy --key house-price-map --ciphertext-file ./src/config.js.encrypted --plaintext-file ./src/config.js',
+      ]
   #- name: 'gcr.io/cloud-builders/npm'
   #  args: ['run', 'build']
   #- name: 'gcr.io/$PROJECT_ID/gcloud'

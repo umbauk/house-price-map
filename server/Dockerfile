@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
-RUN mkdir -p /usr/src/app/client
-WORKDIR /usr/src/app/client
+RUN mkdir -p /usr/src/app/server
+WORKDIR /usr/src/app/server
 
 COPY package*.json ./
 
@@ -9,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "start"]

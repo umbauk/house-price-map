@@ -1,11 +1,17 @@
 export async function refreshNearbyPlaces(map) {
   let mapBounds = map.getBounds().toJSON();
   // map.getBounds(): ((53.302753042851606, -6.291490458019325), (53.3067535745927, -6.2870111689644546))
-  // http://localhost:3001/getPrices/53.302753042851606/-6.291490458019325/53.3067535745927/-6.2870111689644546
 
   try {
+    let fetchUrl = '';
+    if (window.location.hostname === 'localhost') {
+      fetchUrl = 'http://localhost:3001/getPrices/';
+    } else {
+      fetchUrl = '/api/getPrices/';
+    }
+
     let visiblePropertyDetailsArray = await fetch(
-      'http://localhost:3001/getPrices/' +
+      fetchUrl +
         mapBounds.south +
         '/' +
         mapBounds.west +

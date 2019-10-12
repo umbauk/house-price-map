@@ -28,8 +28,10 @@ import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 [x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
 [x] populate coordinates from shanelynn.ie data
 [x] Add text box for users to search for address
-[ ] Add FAQ / Info button and pop up
+[ ] Add FAQ / Info button and pop up (include summary stats)
 [ ] calculate today prices of properties, Add toggle button to convert all prices to today's prices
+[ ] Add pipeline to upload new prices as come available including getting coordinates
+[ ] Manually add coordinates for lat: 0 properties (or tidy up addresses)
 [ ] handle VAT on new properties
 [ ] put estimated prices on map for all houses that don't have price data properties
   - find all addresses on street or within certain bounds
@@ -111,7 +113,6 @@ class App extends Component {
 
       // only display results when map zoomed in enough
       if (this.state.map.getZoom() >= 17) {
-        console.log(this.state.map);
         markersArray = await getPlacesAndUpdateListings(this.state.map);
 
         this.setState({

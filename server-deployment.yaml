@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: hpm-server-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+        - image: gcr.io/everyones-happy/hpm-server
+          imagePullPolicy: 'Always'
+          name: server
+          ports:
+            - containerPort: 3001
+          resources: {}
+          #       volumeMounts:
+          #       - mountPath: /usr/src/app/server
+          #         name: server-claim0
+          #       - mountPath: /server/node-modules
+          #         name: server-claim1
+          workingDir: /usr/src/app/server
+      restartPolicy: Always
+  #     volumes:
+  #     - name: server-claim0
+  #       persistentVolumeClaim:
+  #         claimName: server-claim0
+  #     - name: server-claim1
+  #       persistentVolumeClaim:
+  #         claimName: server-claim1
+status: {}

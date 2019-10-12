@@ -1,0 +1,29 @@
+version: '2'
+services:
+  client:
+    image: gcr.io/everyones-happy/hpm-client
+    restart: always
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app/client
+    volumes:
+      - ./client:/usr/src/app/client
+    entrypoint: ['npm', 'start']
+    links:
+      - server
+    networks:
+      - hpm-network
+  server:
+    image: gcr.io/everyones-happy/hpm-server
+    restart: always
+    ports:
+      - 3001:3001
+    working_dir: /usr/src/app/server
+    volumes:
+      - ./server:/usr/src/app/server
+      - /server/node_modules
+    networks:
+      - hpm-network
+networks:
+  hpm-network:
+    driver: bridge

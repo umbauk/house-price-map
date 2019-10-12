@@ -12,8 +12,6 @@ export async function getPlacesAndUpdateListings(
   let [deDupedPropertyDetailsArray, duplicatesPropertyDetailsArray] = deDupeProperties(
     visiblePropertyDetailsArray.propertyDetails,
   );
-  console.log(deDupedPropertyDetailsArray);
-  console.log(duplicatesPropertyDetailsArray);
 
   const infowindow = new google.maps.InfoWindow({
     content: '',

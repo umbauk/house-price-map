@@ -28,6 +28,7 @@ import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 [x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
 [x] populate coordinates from shanelynn.ie data
 [x] Add text box for users to search for address
+[ ] If zoom in from home screen, prices appear
 [ ] Add FAQ / Info button and pop up (include summary stats)
 [ ] calculate today prices of properties, Add toggle button to convert all prices to today's prices
 [ ] Add pipeline to upload new prices as come available including getting coordinates
@@ -83,6 +84,10 @@ class App extends Component {
     };
     map = await new google.maps.Map(this.mapElement, mapConfig);
     map.addListener('dragend', () => this.updateListings());
+    map.addListener('zoom_changed', () => {
+      console.log('zoom_change');
+      this.updateListings();
+    });
 
     this.setState({
       map: map,
@@ -95,7 +100,6 @@ class App extends Component {
 
   async updateListings() {
     try {
-      console.log('updateListings() running...');
       let markersArray;
 
       // clear markers

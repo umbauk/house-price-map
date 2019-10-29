@@ -1,7 +1,7 @@
 version: '2'
 services:
   client:
-    image: gcr.io/everyones-happy/hpm-client
+    image: gcr.io/everyones-happy/hpm-client:$SHORT_SHA
     restart: always
     ports:
       - 3000:3000
@@ -14,7 +14,7 @@ services:
     networks:
       - hpm-network
   server:
-    image: gcr.io/everyones-happy/hpm-server
+    image: gcr.io/everyones-happy/hpm-server:$SHORT_SHA
     restart: always
     ports:
       - 3001:3001

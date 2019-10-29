@@ -18,8 +18,10 @@ steps:
 
   - name: 'gcr.io/$PROJECT_ID/docker-compose'
     id: Build
-    args: ['up']
-  tags: ['cloud-builders-community']
+    args:
+      - 'up'
+  tags:
+    - 'cloud-builders-community'
 
   # This step pushes the images to Container Registry
   # The PROJECT_ID and SHORT_SHA variables are automatically

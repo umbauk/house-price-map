@@ -16,11 +16,11 @@ steps:
   #     - 'gcr.io/$PROJECT_ID/hpm-client:$SHORT_SHA'
   #     - './client'
 
-    - name: 'gcr.io/cloud-builders/docker-compose'
-      id: Build
-      args:
-        - 'up'
-        - '.'
+  - name: 'gcr.io/$PROJECT_ID/docker-compose'
+    id: Build
+    args:
+      - ['up']
+    tags: ['cloud-builders-community']
 
   # This step pushes the images to Container Registry
   # The PROJECT_ID and SHORT_SHA variables are automatically

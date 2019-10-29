@@ -44,7 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://www.darrengreenfield.com/house-price-map",
+  "homepage": "https://housepricemap.ie",
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3"

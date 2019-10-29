@@ -24,20 +24,20 @@ steps:
   # The PROJECT_ID and SHORT_SHA variables are automatically
   # replaced by Cloud Build.
   - name: 'gcr.io/cloud-builders/docker'
-    id: Push
+    id: 'Push server'
     args:
       - 'push'
       - 'gcr.io/$PROJECT_ID/hpm-server:$SHORT_SHA'
 
   - name: 'gcr.io/cloud-builders/docker'
-    id: Push
+    id: 'Push client'
     args:
       - 'push'
       - 'gcr.io/$PROJECT_ID/hpm-client:$SHORT_SHA'
 
   # This step updates the image being used in GKE deployment
   - name: 'gcr.io/cloud-builders/kubectl'
-    id: Update GKE deployment
+    id: Update server GKE deployment
     args:
       - 'set'
       - 'image'
@@ -50,7 +50,7 @@ steps:
       - 'CLOUDSDK_CONTAINER_CLUSTER=your-first-cluster-1'
 
       - name: 'gcr.io/cloud-builders/kubectl'
-    id: Update GKE deployment
+    id: Update client KE deployment
     args:
       - 'set'
       - 'image'

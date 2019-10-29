@@ -1,6 +1,6 @@
 const House = require('../models/house');
 //const moment = require('moment');
-require('dotenv').config();
+//require('dotenv').config();
 const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_API_KEY,
 });

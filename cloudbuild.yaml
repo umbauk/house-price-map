@@ -18,8 +18,7 @@ steps:
 
   - name: 'gcr.io/$PROJECT_ID/docker-compose'
     id: Build
-    args:
-      - ['up']
+    args: ['up']
     tags: ['cloud-builders-community']
 
   # This step pushes the images to Container Registry

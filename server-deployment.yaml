@@ -24,19 +24,17 @@ spec:
           name: server
           ports:
             - containerPort: 3001
-          resources: {}
-          #       volumeMounts:
-          #       - mountPath: /usr/src/app/server
-          #         name: server-claim0
-          #       - mountPath: /server/node-modules
-          #         name: server-claim1
           workingDir: /usr/src/app/server
+          env:
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-maps-api-key
+                  key: GOOGLE_API_KEY
+          env:
+            - name: MONGO_DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-property-price-db-url
+                  key: MONGO_DB_URL
       restartPolicy: Always
-  #     volumes:
-  #     - name: server-claim0
-  #       persistentVolumeClaim:
-  #         claimName: server-claim0
-  #     - name: server-claim1
-  #       persistentVolumeClaim:
-  #         claimName: server-claim1
-status: {}

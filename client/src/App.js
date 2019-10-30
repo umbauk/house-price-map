@@ -194,7 +194,12 @@ class App extends Component {
         <div id='cardtable-container'>
           <Card id='welcome-card'>
             <CardBody>
-              <CardTitle>Welcome to Dublin House Price Map</CardTitle>
+              <CardTitle>
+                <div id='house-price-map'>
+                  <a href='/'>House Price Map</a>
+                </div>
+                <div id='subtitle'>Dublin property sales mapped</div>
+              </CardTitle>
               <CardText>Where do you want to search?</CardText>
               <Input
                 type='text'
@@ -205,11 +210,17 @@ class App extends Component {
                 onKeyDown={this.keyPress}
                 onChange={this.locationTextBoxChanged}
               />
-              <Button className='button' onClick={this.locationBtnClicked} name='location'>
+              <Button
+                className='button'
+                color='primary'
+                onClick={this.locationBtnClicked}
+                name='location'
+              >
                 Submit
               </Button>
               <Button
                 className='button'
+                color='primary'
                 onClick={this.locationBtnClicked}
                 name='useCurrentLocation'
               >

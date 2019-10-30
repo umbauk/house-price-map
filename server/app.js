@@ -1,4 +1,4 @@
-//require('dotenv').config({ path: __dirname + '/.env' });
+if (!process.env.MONGO_DB_URL) require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');

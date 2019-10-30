@@ -64,28 +64,12 @@ a:hover {
   height: auto;
 }
 
-@media screen and (max-width: 600px) {
-  #map-element {
-    height: 55%;
-    width: 100%;
-    top: 0%;
-    float: left;
-  }
-
-  #cardtable-container {
-    position: absolute;
-    top: 55%;
-    left: 0%;
-    width: 100%;
-    height: auto;
-  }
-}
-
 #welcome-card {
   position: absolute;
   top: 0%;
   width: 100%;
   background-color: rgb(255, 255, 255);
+  height: auto;
 }
 
 .card-text {
@@ -111,9 +95,10 @@ a:hover {
 }
 
 #house-price-map {
-  font-family: Pacifico;
+  font-family: Courgette;
   font-size: 3rem;
   color: #209cee;
+  font-weight: bold;
 }
 
 #subtitle {
@@ -125,4 +110,31 @@ a:hover {
 #locationTextBox {
   margin: 5px;
   margin-top: 0px;
+}
+
+@media screen and (max-width: 600px) {
+  #map-element {
+    height: 76%;
+    width: 100%;
+    top: 0%;
+    float: left;
+  }
+
+  #welcome-card {
+    top: auto;
+    bottom: 0%;
+  }
+
+  #cardtable-container {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: 0%;
+    width: 100%;
+    height: auto;
+  }
+
+  #house-price-map {
+    font-size: 2.2rem;
+  }
 }

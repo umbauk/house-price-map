@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: server
   name: hpm-server-deployment
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   template:
@@ -21,7 +21,7 @@ spec:
       containers:
         - image: gcr.io/everyones-happy/hpm-server
           imagePullPolicy: 'Always'
-          name: server
+          name: hpm-server-container
           ports:
             - containerPort: 3001
           workingDir: /usr/src/app/server

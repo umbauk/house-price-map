@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: client
   name: hpm-client-deployment
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   template:
@@ -24,7 +24,7 @@ spec:
             - start
           image: gcr.io/everyones-happy/hpm-client
           imagePullPolicy: 'Always'
-          name: client
+          name: hpm-client-container
           ports:
             - containerPort: 3000
           resources: {}

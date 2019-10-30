@@ -3,7 +3,6 @@ import './App.css';
 import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import { lookupPlaceName } from './api/lookupPlaceName';
-import Config from './config.js'; // API Keys
 import loadJS from './loadJS.js'; // loads Google Maps API script
 import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 
@@ -65,7 +64,10 @@ class App extends Component {
     // so Google Maps can invoke it
     window.initMap = this.initMap;
     // Asynchronously load the Google Maps script, passing in the callback reference
-    const KEY = Config.passwords.GOOGLE_API_KEY;
+    const KEY =
+      window.location.hostname === 'localhost'
+        ? process.env.REACT_APP_GOOGLE_API_KEY
+        : 'AIzaSyDxB_adL1-Q4Zila6wRYn8LbO0RJtGRz5w'; // host restricted
     await loadJS(
       `https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`,
     );

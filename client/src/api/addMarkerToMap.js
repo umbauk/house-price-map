@@ -27,7 +27,7 @@ export function addMarkerToMap(addressCoords, price, date_of_sale, address, map,
   marker.addListener('click', () => {
     infowindow.setContent(
       `<p><b>Address:</b> ${address}</p>` +
-        `<p><b>Date of Sale:</b> ${moment(date_of_sale).format('DD MMM YYYY')}</p>`,
+        `<p><b>Date of Sale:</b> ${moment(date_of_sale, 'MM/DD/YYYY').format('DD MMM YYYY')}</p>`,
     );
     infowindow.open(map, marker);
   });
@@ -109,18 +109,18 @@ function createInfoWindowContent(property) {
     // House
     infoWindowContent = `<p><b>Address:</b> ${property[0].address}</p>`;
     property.forEach((sale, index) => {
-      infoWindowContent += `<b>${moment(sale.date_of_sale).format('DD MMM YYYY')}</b> - ${
-        property[index].formattedPrice
-      }<br>`;
+      infoWindowContent += `<b>${moment(sale.date_of_sale, 'MM/DD/YYYY').format(
+        'DD MMM YYYY',
+      )}</b> - ${property[index].formattedPrice}<br>`;
     });
   } else {
     // Apartments
     infoWindowContent = `<table><thead><tr><td><b>Date of Sale</b></td><td><b>Address</b></td><td><b>Sale Price</b></td></tr></thead>
       <tbody>`;
     property.forEach((sale, index) => {
-      infoWindowContent += `<tr><td>${moment(sale.date_of_sale).format('DD MMM YYYY')}</td> <td>${
-        property[index].address
-      }</td> <td>${property[index].formattedPrice}</td></tr>`;
+      infoWindowContent += `<tr><td>${moment(sale.date_of_sale, 'MM/DD/YYYY').format(
+        'DD MMM YYYY',
+      )}</td> <td>${property[index].address}</td> <td>${property[index].formattedPrice}</td></tr>`;
     });
     infoWindowContent += `</tbody></table>`;
   }

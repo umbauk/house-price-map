@@ -87,7 +87,6 @@ class App extends Component {
     map = await new google.maps.Map(this.mapElement, mapConfig);
     map.addListener('dragend', () => this.updateListings());
     map.addListener('zoom_changed', () => {
-      console.log('zoom_change');
       this.updateListings();
     });
 

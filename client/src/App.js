@@ -1,10 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import { lookupPlaceName } from './api/lookupPlaceName';
 import loadJS from './loadJS.js'; // loads Google Maps API script
-import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
+import {
+  Card,
+  CardText,
+  CardBody,
+  CardTitle,
+  Button,
+  Input,
+  Popover,
+  PopoverHeader,
+  PopoverBody,
+} from 'reactstrap';
 
 // db.shane_lynn_dump.aggregate([ { $match: {} }, { $unset: "_id" }, { $merge: { into: db.dublin, on: [ "date_of_sale", "address" ] } } ])
 /* global google */
@@ -40,6 +50,46 @@ import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 Stretch:
 [ ] Ability for users to submit corrections/new data e.g. add new addresses, move markers, correct amounts
 */
+
+const About = props => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const toggle = () => setPopoverOpen(!popoverOpen);
+
+  return (
+    <div>
+      <Button id='about' type='button'>
+        About
+      </Button>
+      <Popover
+        placement='auto'
+        trigger='legacy'
+        isOpen={popoverOpen}
+        target='about'
+        toggle={toggle}
+      >
+        <PopoverHeader>About</PopoverHeader>
+        <PopoverBody>
+          housepricemap.ie was designed and built by Darren Greenfield as a project to help him
+          learn to code. During his move to Palo Alto, California he came across lots of great US
+          property websites showing rental and price history. He was surprised that similar sites
+          didn't exist for his home town of Dublin, Ireland. So he tried to make one...{' '}
+          <div className='spacer' />
+          You can read more about him in his{' '}
+          <a href='https://medium.com/@darren.g' target='_blank' rel='noopener noreferrer'>
+            Medium blog posts
+          </a>{' '}
+          , check out his personal website at
+          <a href='https://darrengreenfield.com' target='_blank' rel='noopener noreferrer'>
+            darrengreenfield.com
+          </a>
+          , or contact him at{' '}
+          <a href='mailto:darren.greenfield@gmail.com'>darren.greenfield@gmail.com</a>
+        </PopoverBody>
+      </Popover>
+    </div>
+  );
+};
 
 class App extends Component {
   constructor(props) {
@@ -226,6 +276,7 @@ class App extends Component {
               >
                 Use current location
               </Button>
+              <About />
             </CardBody>
           </Card>
         </div>

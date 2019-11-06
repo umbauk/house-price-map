@@ -1,0 +1,33 @@
+// db.shane_lynn_dump.aggregate([ { $match: {} }, { $unset: "_id" }, { $merge: { into: db.dublin, on: [ "date_of_sale", "address" ] } } ])
+
+/* Bugs:
+[ ] propertyDetails array seems to have too many results returned
+*/
+
+/* To do:
+[x] display Map
+[x] put text on address (get address, format, send to Maps API, receive back coords, put text at coords)
+[x] upload price data to MongoDB
+[x] write server code
+[x] connect MongoDB to app
+[x] collate coords for addresses
+[x] put all prices on map
+[x] only pull from mongoDB the coordinates for houses within current map view e.g. where lat < lat of top/bottom of screen
+[x] remove markers when zoom out, add markers when zoom in
+[x] when click prices, open info window with address, sale date and sale price (may be more than one sale date and price)
+[x] when have same/very similar coordinates, collapse into one box with list of addresses and prices (e.g. apartments)
+[x] populate coordinates from shanelynn.ie data
+[x] Add text box for users to search for address
+[x] If zoom in from home screen, prices appear
+[ ] Add FAQ / Info button and pop up (include summary stats)
+[ ] calculate today prices of properties, Add toggle button to convert all prices to today's prices
+[ ] Add pipeline to upload new prices as come available including getting coordinates
+[ ] Manually add coordinates for lat: 0 properties (or tidy up addresses)
+[ ] handle VAT on new properties
+[ ] put estimated prices on map for all houses that don't have price data properties
+  - find all addresses on street or within certain bounds
+
+
+Stretch:
+[ ] Ability for users to submit corrections/new data e.g. add new addresses, move markers, correct amounts
+*/

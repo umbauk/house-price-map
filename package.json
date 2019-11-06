@@ -11,7 +11,7 @@
     "helmet": "^3.21.0",
     "leaflet": "^1.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.0",
+    "mongoose": "^5.7.5",
     "pug": "^2.0.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

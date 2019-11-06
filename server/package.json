@@ -8,9 +8,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "helmet": "^3.21.0",
+    "helmet": "^3.21.2",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.7"
+    "mongoose": "^5.7.8"
   },
   "scripts": {
     "server": "nodemon ./src/server/app.js"
@@ -35,7 +35,7 @@
   },
   "homepage": "https://www.darrengreenfield.com/house-price-map",
   "devDependencies": {
-    "eslint": "^6.3.0",
+    "eslint": "^6.6.0",
     "eslint-plugin-react": "^7.14.3"
   }
 }

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 //const moment = require('moment');
 const Schema = mongoose.Schema;
 
-let ShaneLynnSchema = new Schema(
+let dataImportSchema = new Schema(
   {
     date_of_sale: { type: Date, required: true }, //dd/mm/yyyy
     address: { type: String, required: true },
@@ -19,4 +19,4 @@ let ShaneLynnSchema = new Schema(
   { collection: 'shane_lynn_dump' },
 );
 
-module.exports = mongoose.model('ShaneLynn', ShaneLynnSchema);
+module.exports = mongoose.model('DataImport', dataImportSchema);

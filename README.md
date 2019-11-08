@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/umbauk/house-price-map/blob/master/public/android-chrome-512x512.png" height="100px">
+<img src="https://github.com/umbauk/house-price-map/blob/master/client/public/android-chrome-512x512.png" height="100px">
 </p>
 
 # House Price Map

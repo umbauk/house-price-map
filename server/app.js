@@ -1,4 +1,4 @@
-if (!process.env.MONGO_DB_URL) require('dotenv').config({ path: __dirname + '/.env' });
+if (!process.env.MONGO_DB_URI) require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
@@ -12,7 +12,7 @@ const indexRouter = require('./routes/index');
 const app = express();
 app.use(helmet());
 
-let mongoDB = process.env.MONGO_DB_URL;
+let mongoDB = process.env.MONGO_DB_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));

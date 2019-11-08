@@ -1,0 +1,101 @@
+date_of_sale,address,postal_code,county,price,not_full_market_price,vat_exclusive,description_of_property,property_size_description,lat,lng
+01/04/2010,"The Mews, 11A Wyckham Park Road, Dundrum",Dublin 14,Dublin,345000,No,No,Second-Hand Dwelling house /Apartment,,53.284155,-6.2466648
+01/04/2010,"1 Meadow Avenue, Dundrum, Dublin 14",Dublin 14,Dublin,438500,No,No,Second-Hand Dwelling house /Apartment,,53.28718749999999,-6.2545797
+01/01/2010,"5 Braemor Drive, Churchtown, Co.Dublin",Dublin 14,Dublin,343000,No,No,Second-Hand Dwelling house /Apartment,,53.302391,-6.263783099999999
+01/04/2010,"206 Philipsburgh Avenue, Marino, Dublin 3",Dublin 14,Dublin,430000,No,No,Second-Hand Dwelling house /Apartment,,53.3712445,-6.238115400000001
+01/04/2010,"22 Laverna Way, Castleknock, Dublin 15",Dublin 14,Dublin,355000,No,No,Second-Hand Dwelling house /Apartment,,53.3736516,-6.383476099999999
+01/04/2010,"23 Elton Park, Sandycove",Dublin 14,Dublin,1800000,No,No,Second-Hand Dwelling house /Apartment,,53.2838721,-6.1145638
+01/04/2010,"12 Sallymount Avenue, Ranelagh",Dublin 14,Dublin,425000,No,No,Second-Hand Dwelling house /Apartment,,53.3252788,-6.2511864
+01/04/2010,"29 Carysfort Woods, Blackrock",Dublin 14,Dublin,547500,No,No,Second-Hand Dwelling house /Apartment,,53.28662,-6.1858751
+01/04/2010,"33 RAGIAN ROAD, BALLSBRIDGE, DUBLIN 4",Dublin 14,Dublin,700000,No,No,Second-Hand Dwelling house /Apartment,,53.3297669,-6.238922
+01/04/2010,"44 Allen Park Road, Stillorgan, County Dublin",Dublin 14,Dublin,350000,No,No,Second-Hand Dwelling house /Apartment,,53.28551160000001,-6.2017922
+01/04/2010,"49 ballynakelly green, newcastle",Dublin 14,Dublin,499600,No,Yes,New Dwelling house /Apartment,greater than 125 sq metres,53.29441629999999,-6.490211899999999
+01/04/2010,"5 Clancy Road, Finglas, Dublin 11",Dublin 14,Dublin,205000,No,No,Second-Hand Dwelling house /Apartment,,53.393317,-6.2932231
+01/04/2010,"54., brides glen avenue, swords",Dublin 14,Dublin,337500,No,No,Second-Hand Dwelling house /Apartment,,53.4693838,-6.2378709
+01/04/2010,"90 Suncroft Drive, Tallaght, Dublin 24",Dublin 14,Dublin,147950,No,No,Second-Hand Dwelling house /Apartment,,53.28205519999999,-6.4080877
+01/05/2010,"87 MANGERTON RAOD, DRIMNAGH",Dublin 14,Dublin,182556.12,No,No,Second-Hand Dwelling house /Apartment,,53.3275112,-6.3292258
+01/05/2010,"9 Temple Manor Drive, Walkinstown, Dublin 12",Dublin 14,Dublin,300000,No,No,Second-Hand Dwelling house /Apartment,,53.3072072,-6.3331935
+01/05/2010,"3 Myrtle Square, The Coast, Baldoyle",Dublin 14,Dublin,265198,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.3987567,-6.149561599999999
+01/05/2010,"134 longboat quay north, sir john rogersons quay",Dublin 14,Dublin,225000,No,Yes,New Dwelling house /Apartment,less than 38 sq metres,53.3448353,-6.236740699999999
+01/05/2010,"15 spence, villas, glengear",Dublin 14,Dublin,1600000,No,No,Second-Hand Dwelling house /Apartment,,53.28372419999999,-6.1224169
+01/05/2010,"35 Charnwood Heath, Clonsilla, Dublin 15",Dublin 14,Dublin,297000,No,No,Second-Hand Dwelling house /Apartment,,53.3864116,-6.414905399999999
+01/05/2010,"6 Clonasleigh Lane, Shankill",Dublin 14,Dublin,415000,No,No,Second-Hand Dwelling house /Apartment,,53.2354876,-6.1213448
+01/05/2010,"66 Villa Park Gardens, Navan Road",Dublin 14,Dublin,410000,No,No,Second-Hand Dwelling house /Apartment,,53.3649765,-6.311369399999999
+01/05/2010,"Apt 1 Linden Court, Blackrock",Dublin 14,Dublin,395000,No,No,Second-Hand Dwelling house /Apartment,,53.292897,-6.193231099999999
+01/06/2010,"18 Earlsfort Court, Lucan, Co. Dublin",Dublin 14,Dublin,280000,No,No,Second-Hand Dwelling house /Apartment,,53.3467734,-6.4157666
+01/06/2010,"31 Gledswood Park, Clonskeagh, Dublin 14",Dublin 14,Dublin,385000,No,No,Second-Hand Dwelling house /Apartment,,53.3035517,-6.2386716
+01/06/2010,"11 Tritonville Court, Sandymount",Dublin 14,Dublin,684000,No,No,Second-Hand Dwelling house /Apartment,,53.3342962,-6.219752
+01/06/2010,"58 Palmer Park, Ballyboden, Rathfarnham",Dublin 14,Dublin,250000,No,No,Second-Hand Dwelling house /Apartment,,53.280305,-6.290551499999999
+01/06/2010,"84 Castleland Park View, Balbriggan",Dublin 14,Dublin,325000,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.5998692,-6.1764578
+01/06/2010,"9 Colthurst Green, Huntington Glen, Lucan",Dublin 14,Dublin,228000,No,No,Second-Hand Dwelling house /Apartment,,53.3469907,-6.4197619
+01/07/2010,"15 Griffith Drive, Finglas East",Dublin 14,Dublin,183927.15,Yes,No,Second-Hand Dwelling house /Apartment,,53.3833197,-6.280481399999999
+01/07/2010,"7 moyclare avenue, baldoyle",Dublin 14,Dublin,152500,Yes,No,Second-Hand Dwelling house /Apartment,,53.3930239,-6.126981499999999
+01/07/2010,"16 Landscape Gardens, Churchtown",Dublin 14,Dublin,515000,No,No,Second-Hand Dwelling house /Apartment,,53.29853,-6.2572787
+01/07/2010,"24 Drimnagh Road, Drimnagh, Dublin 12",Dublin 14,Dublin,140000,No,No,Second-Hand Dwelling house /Apartment,,53.3249592,-6.322078100000001
+01/07/2010,"32 Griffeen Glen Avenue, Lucan",Dublin 14,Dublin,137500,Yes,No,Second-Hand Dwelling house /Apartment,,53.34151379999999,-6.436643399999999
+01/07/2010,"37 Castle Court, Killiney Hill Road, Killiney",Dublin 14,Dublin,272500,No,No,Second-Hand Dwelling house /Apartment,,53.2454154,-6.120913000000001
+01/07/2010,"Unit 55  Heathfield Park, Heathfield, Cappagh Road  Finglas",Dublin 14,Dublin,289950,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.3955426,-6.3266098
+01/08/2010,"21 Charnwood Gardens, Clonsilla",Dublin 14,Dublin,210000,Yes,No,Second-Hand Dwelling house /Apartment,,53.3854726,-6.4121122
+01/08/2010,"44 Bayside Walk, Sutton",Dublin 14,Dublin,330000,No,No,Second-Hand Dwelling house /Apartment,,53.39063950000001,-6.1400569
+01/08/2010,"APT 8  1 GRANGE LODGE AVENUE, CLONGRIFFIN",Dublin 14,Dublin,177685.95,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.4024318,-6.154454899999999
+01/08/2010,"4 Streamville Close, Donaghmeade, Dublin 13",Dublin 14,Dublin,221000,Yes,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.3926714,-6.1713419
+01/08/2010,"21 Maple Avenue, Castleknock",Dublin 14,Dublin,359700,No,No,Second-Hand Dwelling house /Apartment,,53.3787607,-6.383630399999999
+01/08/2010,"26 Sandyford Hall Park, Sandyford",Dublin 14,Dublin,467500,No,No,Second-Hand Dwelling house /Apartment,,53.2630383,-6.2136822
+01/08/2010,"22 Grangeview Road, Clondalkin",Dublin 14,Dublin,200000,No,No,Second-Hand Dwelling house /Apartment,,53.3251618,-6.427333700000001
+01/08/2010,"14 ST. AONGHUS ROAD, TALLAGHT",Dublin 14,Dublin,220000,No,No,Second-Hand Dwelling house /Apartment,,53.29597099999999,-6.3434456
+01/08/2010,"15 deselby lawns, blessington road",Dublin 14,Dublin,220000,Yes,No,Second-Hand Dwelling house /Apartment,,53.2751944,-6.408506699999999
+01/08/2010,"15 Beechdale Place, Ballycullen",Dublin 14,Dublin,298000,No,No,Second-Hand Dwelling house /Apartment,,53.2703502,-6.3351086
+01/08/2010,"29 Sycamore Drive, Kingswood Heights",Dublin 14,Dublin,325000,No,No,Second-Hand Dwelling house /Apartment,,53.3046859,-6.3638322
+01/08/2010,"38 ellensborough copse, kiltipper, dublin",Dublin 14,Dublin,290000,No,No,Second-Hand Dwelling house /Apartment,,53.2671796,-6.3725422
+01/08/2010,"9 SUNDALE MEADOWS, MOUNTAINVIEW, TALLAGHT",Dublin 14,Dublin,153000,No,No,Second-Hand Dwelling house /Apartment,,53.2845767,-6.4083043
+01/08/2010,"24 abbey park, killester avenue",Dublin 14,Dublin,275000,No,No,Second-Hand Dwelling house /Apartment,,53.3776798,-6.210222799999999
+01/08/2010,"Apartment 26, Portabello Harbour, Grove Road",Dublin 14,Dublin,252500,No,No,Second-Hand Dwelling house /Apartment,,53.3296952,-6.2656279
+01/08/2010,"109 Dowland Road, Walkinstown",Dublin 14,Dublin,251000,No,No,Second-Hand Dwelling house /Apartment,,53.3189532,-6.318035099999999
+01/08/2010,"14 Castleview Park, Malahide",Dublin 14,Dublin,620000,No,No,Second-Hand Dwelling house /Apartment,,53.4478891,-6.1707252
+01/08/2010,"2 Castlegate House, Adamstown",Dublin 14,Dublin,195000,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.336896,-6.458372
+01/08/2010,"27 North  Priory, Navan Road",Dublin 14,Dublin,302500,No,No,Second-Hand Dwelling house /Apartment,,53.3725365,-6.31302
+01/08/2010,"36 Broadford Lawns, Ballinteer, Dublin 16",Dublin 14,Dublin,375000,No,No,Second-Hand Dwelling house /Apartment,,53.2783035,-6.257304599999999
+01/08/2010,"581 Woodview Cottages, Rathfarnham, Dublin 14",Dublin 14,Dublin,352000,No,No,Second-Hand Dwelling house /Apartment,,53.2995126,-6.2880332
+01/08/2010,"62 Watson Road, Killiney",Dublin 14,Dublin,525000,No,No,Second-Hand Dwelling house /Apartment,,53.2604781,-6.1335136
+01/08/2010,"64 The Way, Hunters Road, Clonee",Dublin 14,Dublin,220000,No,No,Second-Hand Dwelling house /Apartment,,53.4006899,-6.4193701
+01/08/2010,"67 BELMAYNE PARK, NORTH BELMAYNE, BALGRIFFIN",Dublin 14,Dublin,286334,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.4055432,-6.1708702
+01/08/2010,"7 Eden Grove, Donabate",Dublin 14,Dublin,285000,No,No,Second-Hand Dwelling house /Apartment,,53.49336330000001,-6.1498956
+01/08/2010,"74 Oak Road, Donnycarney, Dublin 9",Dublin 14,Dublin,310000,No,No,Second-Hand Dwelling house /Apartment,,53.3748954,-6.2214059
+01/08/2010,"7 Roebuck Drive, Perrystown, Dublin 12",Dublin 14,Dublin,284000,No,No,Second-Hand Dwelling house /Apartment,,53.3142854,-6.317981899999999
+01/08/2010,"75 Lower Beechwood Avenue, Ranelagh",Dublin 14,Dublin,820000,No,No,Second-Hand Dwelling house /Apartment,,53.32370539999999,-6.2543557
+01/11/2010,"73 COLLEGE PARK, TERENURE",Dublin 14,Dublin,131250,No,No,Second-Hand Dwelling house /Apartment,,53.3031909,-6.307313
+01/11/2010,"20 WHEATFIELD GROVE, CLONDALKIN, DUBLIN 22",Dublin 14,Dublin,184000,No,No,Second-Hand Dwelling house /Apartment,,53.34338899999999,-6.3903222
+01/11/2010,"48 Walsh Road, Drumcondra, Dublin 9",Dublin 14,Dublin,195000,Yes,No,Second-Hand Dwelling house /Apartment,,53.3737961,-6.2613972
+01/11/2010,"10 harrison cove, skerries",Dublin 14,Dublin,247948,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.5827219,-6.124049299999999
+01/11/2010,"16 Oakdale Drive, Ballycullen, Firhouse",Dublin 14,Dublin,322500,No,No,Second-Hand Dwelling house /Apartment,,53.2730079,-6.3393166
+01/11/2010,"108, Castlefield Court, Clonsilla",Dublin 14,Dublin,72000,Yes,No,Second-Hand Dwelling house /Apartment,,53.3851023,-6.4186599
+01/11/2010,"17 Annesley Park, Ranelagh, Dublin 6",Dublin 14,Dublin,930000,No,No,Second-Hand Dwelling house /Apartment,,53.3197594,-6.2569067
+01/11/2010,"29 Myrtle House, Longfield Road  The Coast, Baldoyle",Dublin 14,Dublin,240000,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.3988429,-6.147128599999999
+01/11/2010,"56 Cherrywood Park, Clondalkin",Dublin 14,Dublin,100000,Yes,No,Second-Hand Dwelling house /Apartment,,53.31883020000001,-6.4146228
+01/11/2010,"Apartment 18 The Gallery, Turvey Walk, Donabate",Dublin 14,Dublin,124221.69,Yes,No,Second-Hand Dwelling house /Apartment,,53.4870319,-6.1522465
+01/12/2010,"5 Temple View Park, Clare Hall",Dublin 14,Dublin,290000,No,No,Second-Hand Dwelling house /Apartment,,53.40004769999999,-6.173973699999999
+01/12/2010,"5 Temple View park, Clarehall, Dublin 13",Dublin 14,Dublin,290000,No,No,Second-Hand Dwelling house /Apartment,,53.40004769999999,-6.173973699999999
+01/12/2010,"10 Ailesbury Lawn, Dundrum, Dublin 16",Dublin 14,Dublin,800000,No,No,Second-Hand Dwelling house /Apartment,,53.2848838,-6.246211700000001
+01/12/2010,"1 Cois Inbhir, Donabate",Dublin 14,Dublin,153852.93,Yes,No,Second-Hand Dwelling house /Apartment,,53.495092,-6.144158699999999
+01/12/2010,"15 Rosemount Park, Dundrum, Dublin 14",Dublin 14,Dublin,356000,No,No,Second-Hand Dwelling house /Apartment,,53.2945653,-6.2443861
+01/12/2010,"168 Carrigwood, Firhouse, Dublin 24",Dublin 14,Dublin,285000,No,No,Second-Hand Dwelling house /Apartment,,53.278346,-6.332513199999999
+01/12/2010,"21 Foxwood, Swords",Dublin 14,Dublin,275000,No,No,Second-Hand Dwelling house /Apartment,,53.4534995,-6.212349499999999
+01/12/2010,"25 Belton Park Road, Donnycarney",Dublin 14,Dublin,222500,No,No,Second-Hand Dwelling house /Apartment,,53.37598389999999,-6.225383600000001
+01/12/2010,"32 KILL ABBEY, DEANSGRANGE, BLACKROCK",Dublin 14,Dublin,640000,No,No,Second-Hand Dwelling house /Apartment,,53.28009669999999,-6.163832699999999
+01/12/2010,"35 Saunders House, Spencer Dock  North Wall Quay, Dublin 1",Dublin 14,Dublin,332599.11,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.350099,-6.2385319
+01/12/2010,"7 CASTLEVIEW GROVE, SWORDS",Dublin 14,Dublin,215000,No,No,Second-Hand Dwelling house /Apartment,,53.4731288,-6.236018899999999
+01/12/2010,"Apartment 15 Dawson Court, Cross Avenue, Blackrock",Dublin 14,Dublin,380000,No,No,Second-Hand Dwelling house /Apartment,,53.3068803,-6.2034748
+01/12/2010,"Glendower, Old Station Road, Portmarnock",Dublin 14,Dublin,1475000,No,No,Second-Hand Dwelling house /Apartment,,53.41934060000001,-6.156042299999999
+01/12/2010,"House 2  Dungriffin Road, Howth, County Dublin",Dublin 14,Dublin,594714,No,Yes,New Dwelling house /Apartment,greater than 125 sq metres,53.3804381,-6.0588247
+01/13/2010,"11 Balally Drive, Dundrum",Dublin 14,Dublin,500000,No,No,Second-Hand Dwelling house /Apartment,,53.2845029,-6.2355515
+01/13/2010,"17 Swarnward Court, Parnell Road",Dublin 14,Dublin,345000,No,No,Second-Hand Dwelling house /Apartment,,53.329927,-6.2859286
+01/13/2010,"5 offaly Road, cabra east, dublin 7",Dublin 14,Dublin,227000,No,No,Second-Hand Dwelling house /Apartment,,53.3628556,-6.2836205
+01/13/2010,"231 Seapark, Malahide, Dublin",Dublin 14,Dublin,750000,No,No,Second-Hand Dwelling house /Apartment,,53.4455959,-6.139066499999999
+01/13/2010,"26 The Croft, Parc Na Silla  Loughlinstown",Dublin 14,Dublin,250000,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.2387592,-6.1312606
+01/13/2010,"3 Castlegate House, Adamstown, Dublin 15",Dublin 14,Dublin,124669,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.336896,-6.458372
+01/13/2010,"3 Castlegate House, Castlegate, Adamstown",Dublin 14,Dublin,124669.6,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.336896,-6.458372
+01/13/2010,"3 Merrion Park, South Hill Avenue, Blackrock",Dublin 14,Dublin,470000,No,No,Second-Hand Dwelling house /Apartment,,53.2985288,-6.2006577
+01/13/2010,"36 The Meadows, Grange Road, Clonsilla",Dublin 14,Dublin,151750,No,No,Second-Hand Dwelling house /Apartment,,53.388109,-6.429567
+01/13/2010,"5 Ross Street, Stoneybatter",Dublin 14,Dublin,190000,No,No,Second-Hand Dwelling house /Apartment,,53.3544631,-6.2925305
+01/13/2010,"47 Dalriada, Knocklyon, Dublin 16",Dublin 14,Dublin,70000,No,No,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.27211639999999,-6.324700699999999
+01/13/2010,"Apartment 8 The Sycamore, Elmfield  Ballyogan Road, Leopardstown",Dublin 14,Dublin,248898.68,No,Yes,New Dwelling house /Apartment,greater than or equal to 38 sq metres and less than 125 sq metres,53.2604731,-6.2061547

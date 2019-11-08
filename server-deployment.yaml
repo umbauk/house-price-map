@@ -37,4 +37,9 @@ spec:
                 secretKeyRef:
                   name: mongodb-property-price-db-url
                   key: MONGO_DB_URL
+            - name: MONGO_DB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: house-price-map-config
+                  key: MONGODB_URI
       restartPolicy: Always

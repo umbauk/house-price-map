@@ -13,9 +13,33 @@ const app = express();
 app.use(helmet());
 
 let mongoDB = process.env.MONGO_DB_URI;
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose
+  .connect(mongoDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    keepAlive: true,
+    keepAliveInitialDelay: 300000,
+  })
+  .catch(error => console.error('Cannot connect to MongoDB.', error));
 let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error'));
+db.on('connected', function() {
+  console.log(connected('Mongoose default connection is open to ', dbURL));
+});
+
+db.on('error', function(err) {
+  console.log(error('Mongoose default connection has occured ' + err + ' error'));
+});
+
+db.on('disconnected', function() {
+  console.log(disconnected('Mongoose default connection is disconnected'));
+});
+
+process.on('SIGINT', function() {
+  mongoose.connection.close(function() {
+    console.log('Mongoose default connection is disconnected due to application termination');
+    process.exit(0);
+  });
+});
 
 //app.use(logger('dev'));
 app.use(express.json());
@@ -33,9 +57,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // send the error
   res.status(err.status || 500);

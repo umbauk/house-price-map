@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: house-price-map-config
 data:
-  MONGODB_URI: 'TEST'
+  MONGODB_URI: mongodb://house-price-map-mongo-service:27017

@@ -16,7 +16,7 @@ let HouseSchema = new Schema(
     lat: { type: Number, default: 0 },
     lng: { type: Number, default: 0 },
   },
-  { collection: 'dublin_flattened' },
+  { collection: 'dublin' },
 );
 
 HouseSchema.virtual('estimated_current_price').get(function() {

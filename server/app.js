@@ -12,9 +12,9 @@ const indexRouter = require('./routes/index');
 const app = express();
 app.use(helmet());
 
-let mongoDB = process.env.MONGO_DB_URI;
+let mongoDBURI = process.env.MONGO_DB_URI;
 mongoose
-  .connect(mongoDB, {
+  .connect(mongoDBURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     keepAlive: true,
@@ -23,15 +23,15 @@ mongoose
   .catch(error => console.error('Cannot connect to MongoDB.', error));
 let db = mongoose.connection;
 db.on('connected', function() {
-  console.log(connected('Mongoose default connection is open to ', dbURL));
+  console.log('Mongoose default connection is open');
 });
 
 db.on('error', function(err) {
-  console.log(error('Mongoose default connection has occured ' + err + ' error'));
+  console.log('Mongoose default connection has occured ' + err + ' error');
 });
 
 db.on('disconnected', function() {
-  console.log(disconnected('Mongoose default connection is disconnected'));
+  console.log('Mongoose default connection is disconnected');
 });
 
 process.on('SIGINT', function() {

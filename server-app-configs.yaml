@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: house-price-map-config
-data:
-  MONGODB_URI: mongodb://house-price-map-mongo-service:27017

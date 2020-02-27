@@ -5,7 +5,7 @@ export async function refreshNearbyPlaces(map) {
   try {
     let fetchUrl = '';
     if (window.location.hostname === 'localhost') {
-      fetchUrl = 'http://localhost:3001/api/getPrices/';
+      fetchUrl = 'http://localhost:5001/house-price-map/us-central1/app';
     } else {
       fetchUrl = '/api/getPrices/';
     }

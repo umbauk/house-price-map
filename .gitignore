@@ -24,6 +24,8 @@ db/ignored-files
 OLD_package*
 service-account-key.json
 db/utils/property_price_db.json
+.firebase
+firebase-debug.log
 
 npm-debug.log*
 yarn-debug.log*

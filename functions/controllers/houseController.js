@@ -16,25 +16,25 @@ exports.getPrices = async (req, res, next) => {
       return next('Request area is too large');
     }
 
-    let housesSnapshot = await db
+    let viewableHouses = await db
       .collection('house-sales')
-      .where('lng', '>', parseFloat(req.params.btmLeftLng))
-      .where('lng', '<', parseFloat(req.params.upperRightLng))
+      .where('lat', '>', parseFloat(req.params.btmLeftLat))
+      .where('lat', '<', parseFloat(req.params.upperRightLat))
+      .select('lat', 'lng', 'address', 'date_of_sale', 'price')
       .get()
       .then(snapshots => {
-        return Promise.resolve(snapshots);
+        let viewableHouses = snapshots.docs.filter(house => {
+          if (
+            house.data().lng > parseFloat(req.params.btmLeftLng) &&
+            house.data().lng < parseFloat(req.params.upperRightLng)
+          )
+            return true;
+        });
+        return Promise.resolve(viewableHouses);
       })
       .catch(err => {
         console.log(err);
       });
-
-    let viewableHouses = housesSnapshot.docs.filter(house => {
-      if (
-        house.data().lat > parseFloat(req.params.btmLeftLat) &&
-        house.data().lat < parseFloat(req.params.upperRightLat)
-      )
-        return true;
-    });
 
     let propertyDetails = viewableHouses.map(house => house.data());
 

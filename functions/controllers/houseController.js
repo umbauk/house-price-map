@@ -22,15 +22,15 @@ exports.getPrices = async (req, res, next) => {
       .where('lat', '<', parseFloat(req.params.upperRightLat))
       .select('lat', 'lng', 'address', 'date_of_sale', 'price')
       .get()
-      .then(snapshots => {
-        let viewableHouses = snapshots.docs.filter(house => {
+      .then(snapshot => {
+        let viewableHouses = snapshot.docs.filter(house => {
           if (
             house.data().lng > parseFloat(req.params.btmLeftLng) &&
             house.data().lng < parseFloat(req.params.upperRightLng)
           )
             return true;
         });
-        return Promise.resolve(viewableHouses);
+        return viewableHouses;
       })
       .catch(err => {
         console.log(err);

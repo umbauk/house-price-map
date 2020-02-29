@@ -1,4 +1,5 @@
 const { db } = require('../admin');
+const geoHash = require('ngeohash');
 
 exports.index = async (req, res, next) => {
   res.send(`Reached index. req = ${req}`);
@@ -16,21 +17,18 @@ exports.getPrices = async (req, res, next) => {
       return next('Request area is too large');
     }
 
+    let lower = geoHash.encode(req.params.btmLeftLat, req.params.btmLeftLng);
+    let upper = geoHash.encode(req.params.upperRightLat, req.params.upperRightLng);
+    let hashArea = { lower, upper };
+
     let viewableHouses = await db
       .collection('house-sales')
-      .where('lat', '>', parseFloat(req.params.btmLeftLat))
-      .where('lat', '<', parseFloat(req.params.upperRightLat))
+      .where('geoHash', '>=', hashArea.lower)
+      .where('geoHash', '<=', hashArea.upper)
       .select('lat', 'lng', 'address', 'date_of_sale', 'price')
       .get()
       .then(snapshot => {
-        let viewableHouses = snapshot.docs.filter(house => {
-          if (
-            house.data().lng > parseFloat(req.params.btmLeftLng) &&
-            house.data().lng < parseFloat(req.params.upperRightLng)
-          )
-            return true;
-        });
-        return viewableHouses;
+        return snapshot.docs;
       })
       .catch(err => {
         console.log(err);

@@ -59,15 +59,15 @@ function processObject(object) {
     console.log(counter, obj);
 
     batch[batchNum].set(firestore.collection(COLLECTION_KEY).doc(), obj);
-    firestore
-      .collection(COLLECTION_KEY)
-      .doc()
-      .set(obj)
-      .catch(error => {
-        console.error('Error writing document: ', error);
-        let dt = new Date();
-        fs.writeFile('error-log.txt', dt + ' ' + error);
-      });
+    // firestore
+    //   .collection(COLLECTION_KEY)
+    //   .doc()
+    //   .set(obj)
+    //   .catch(error => {
+    //     console.error('Error writing document: ', error);
+    //     let dt = new Date();
+    //     fs.writeFile('error-log.txt', dt + ' ' + error);
+    //   });
   }
   if (counter > 450) {
     counter = 0;

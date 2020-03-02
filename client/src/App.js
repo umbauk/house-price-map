@@ -69,6 +69,7 @@ class App extends Component {
       },
       map: {},
       markers: [],
+      initialState: true,
     };
 
     this.initMap = this.initMap.bind(this);
@@ -102,9 +103,9 @@ class App extends Component {
       zoom,
     };
     map = await new google.maps.Map(this.mapElement, mapConfig);
-    map.addListener('dragend', () => this.updateListings());
+    map.addListener('dragend', () => this.updateListings('dragend'));
     map.addListener('zoom_changed', () => {
-      this.updateListings();
+      this.updateListings('zoom_changed');
     });
 
     this.setState({
@@ -116,8 +117,14 @@ class App extends Component {
     });
   }
 
-  async updateListings() {
+  async updateListings(evt) {
     try {
+      // if the app is in initial state, do not execute function twice for map move/zoom change and button click
+      if (this.state.initialState === true) {
+        this.setState({ initialState: false });
+        return;
+      }
+
       let markersArray;
 
       // clear markers
@@ -178,6 +185,8 @@ class App extends Component {
     const map = this.state.map;
     const centerCoords = await this.getCenterCoords(evt, map);
 
+    // stop this.updateListings() being called twice from button click and zoom change
+    this.setState({ initialState: true });
     map.panTo(centerCoords);
     map.setCenter(centerCoords);
     map.setZoom(18);

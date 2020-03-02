@@ -19,7 +19,6 @@ exports.getPrices = async (req, res, next) => {
     }
 
     let boundaryBoxesArr = geoHash.bboxes(lowerLat, lowerLng, upperLat, upperLng, 7);
-    console.log('Boundary box:', boundaryBoxesArr);
 
     let returnDocuments = [];
 

@@ -7,6 +7,7 @@ const createError = require('http-errors');
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
+// const addGeoHash = require('./utils/addGeoHashs');
 
 const app = express();
 app.use(helmet());
@@ -34,3 +35,13 @@ app.use(function(err, req, res, next) {
 });
 
 exports.app = functions.https.onRequest(app);
+
+// const runtimeOpts = {
+//   timeoutSeconds: 540,
+//   memory: '2GB',
+// };
+
+// exports.addGeoHash = functions
+//   .runWith(runtimeOpts)
+//   .pubsub.schedule('every friday 00:05')
+//   .onRun(addGeoHash);

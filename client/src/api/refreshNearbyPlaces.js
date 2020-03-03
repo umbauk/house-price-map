@@ -1,6 +1,12 @@
+/*
+ *   Sends the lat/lng bounds of the current Google Map window to the server to get back
+ *   a list of all houses sold in that area ready for rendering
+ */
+
 export async function refreshNearbyPlaces(map) {
+  // map.getBounds() returns bottom left and top right lat/lng coords:
+  // e.g. ((53.302753042851606, -6.291490458019325), (53.3067535745927, -6.2870111689644546))
   let mapBounds = map.getBounds().toJSON();
-  // map.getBounds(): ((53.302753042851606, -6.291490458019325), (53.3067535745927, -6.2870111689644546))
 
   try {
     let fetchUrl = '/api/getPrices/';

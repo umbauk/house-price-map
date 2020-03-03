@@ -1,6 +1,15 @@
+/*
+ * Gets user's current location
+ */
+
 export function getCurrentLocation() {
   return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) reject(new Error('Get User Location error'));
+    if (!navigator.geolocation)
+      reject(
+        new Error(
+          'Get User Location error. Try granting permission for this site to use your location',
+        ),
+      );
     else {
       return Promise.resolve(
         navigator.geolocation.getCurrentPosition(position => {
@@ -8,7 +17,6 @@ export function getCurrentLocation() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          console.log('1) getCurrentLocation() complete');
           resolve(currentCoordinates);
         }),
       );

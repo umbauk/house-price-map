@@ -1,9 +1,13 @@
+/*
+ * Main App file. Contains UI components and UI logic
+ */
+
 import React, { Component, useState } from 'react';
 import './App.css';
-import { getPlacesAndUpdateListings } from './api/getPlacesAndUpdateListings';
+import { getMarkers } from './api/getMarkers';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import { lookupPlaceName } from './api/lookupPlaceName';
-import loadJS from './loadJS.js'; // loads Google Maps API script
+import loadGoogleScript from './loadGoogleScript'; // loads Google Maps API script
 import {
   Card,
   CardText,
@@ -16,6 +20,7 @@ import {
   PopoverBody,
 } from 'reactstrap';
 
+// global google is required to access the google package which is loaded in loadJS
 /* global google */
 
 const About = props => {
@@ -86,7 +91,7 @@ class App extends Component {
       window.location.hostname === 'localhost'
         ? process.env.REACT_APP_GOOGLE_API_KEY
         : 'AIzaSyDxB_adL1-Q4Zila6wRYn8LbO0RJtGRz5w'; // host restricted
-    await loadJS(
+    await loadGoogleScript(
       `https://maps.googleapis.com/maps/api/js?key=${KEY}&libraries=places&callback=initMap`,
     );
   }
@@ -142,7 +147,7 @@ class App extends Component {
 
       // only display results when map zoomed in enough
       if (this.state.map.getZoom() >= 17) {
-        markersArray = await getPlacesAndUpdateListings(this.state.map);
+        markersArray = await getMarkers(this.state.map);
 
         this.setState({
           markers: markersArray,
@@ -197,8 +202,8 @@ class App extends Component {
     return new Promise(async (resolve, reject) => {
       if (evt.target.name === 'useCurrentLocation') {
         resolve(await getCurrentLocation());
-      } else if (!this.state.locationCoords) {
         // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
+      } else if (!this.state.locationCoords) {
         resolve(
           await lookupPlaceName(
             map,

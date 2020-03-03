@@ -1,7 +1,15 @@
+/*
+ * Add markers to the google map and format the info windows
+ */
+
 /* global google */
 import blackMarker from '../img/black_wide.png';
+import blackDupeMarker from '../img/black_wide_dupe2.png';
 import moment from 'moment';
 
+/*
+ * Add marker to the map for a single house
+ */
 export function addMarkerToMap(addressCoords, price, date_of_sale, address, map, infowindow) {
   const image = {
     url: blackMarker, //'',
@@ -35,9 +43,12 @@ export function addMarkerToMap(addressCoords, price, date_of_sale, address, map,
   return marker;
 }
 
+/*
+ * Add marker to the map for multi property location
+ */
 export function addDuplicateMarkerToMap(property, map, infowindow) {
   const image = {
-    url: blackMarker, //'',
+    url: blackDupeMarker, //'',
     size: new google.maps.Size(50, 15),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(20, 20),
@@ -47,6 +58,8 @@ export function addDuplicateMarkerToMap(property, map, infowindow) {
     property[index].formattedPrice = formatPrice(sale.price);
   });
 
+  sortProperties(property);
+
   const marker = new google.maps.Marker({
     position: { lat: property[0].lat, lng: property[0].lng },
     map: map,
@@ -54,12 +67,10 @@ export function addDuplicateMarkerToMap(property, map, infowindow) {
       color: 'white',
       fontWeight: 'bold',
       fontSize: '12px',
-      text: 'Click',
+      text: property[property.length - 1].formattedPrice, // show the most recent sale price on the map
     },
     icon: image,
   });
-
-  sortProperties(property);
 
   let infoWindowContent = createInfoWindowContent(property);
 
@@ -71,6 +82,7 @@ export function addDuplicateMarkerToMap(property, map, infowindow) {
   return marker;
 }
 
+// Sort properties by date of sale
 function sortProperties(property) {
   property.sort((a, b) => {
     a = new Date(a.date_of_sale);
@@ -79,8 +91,8 @@ function sortProperties(property) {
   });
 }
 
+// if price > 1m then format as millions, else as thousands
 function formatPrice(price) {
-  // if price > 1m then format as millions, else as thousands
   if (price >= 1000000) {
     return (
       new Intl.NumberFormat('en-IE', {
@@ -104,9 +116,10 @@ function formatPrice(price) {
 function createInfoWindowContent(property) {
   let infoWindowContent = '';
   // If all addresses in the array are equal then this is a house with multiple sales
-  // If all addresses in the array are not equal then this is an apartment block with multiple different addresses
+  // If all addresses in the array are not equal then this is an apartment block with multiple different addresses,
+  // or a group of properties very close together
   if (property.every(sale => sale.address === property[0].address)) {
-    // House
+    // House or grouped properties
     infoWindowContent = `<p><b>Address:</b> ${property[0].address}</p>`;
     property.forEach((sale, index) => {
       infoWindowContent += `<b>${moment(sale.date_of_sale, 'MM/DD/YYYY').format(

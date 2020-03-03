@@ -1,3 +1,8 @@
+/*
+ *   Look up user entered place using google.maps places service. Return coordinates
+ *   of the location
+ */
+
 /* global google */
 
 export async function lookupPlaceName(map, placeToLookup, currentMapCenter) {

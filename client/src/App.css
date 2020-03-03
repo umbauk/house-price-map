@@ -136,6 +136,6 @@ a:hover {
     position: relative;
     bottom: auto;
     right: auto;
-    margin: 5px;
+    margin-top: 5px;
   }
 }

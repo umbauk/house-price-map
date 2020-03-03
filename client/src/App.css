@@ -23,10 +23,6 @@ h2 {
   font-size: 0.5em;
 }
 
-p.card-text {
-  margin-bottom: 0.35rem;
-}
-
 a {
   display: inline-block;
   position: relative;
@@ -34,7 +30,6 @@ a {
   padding: 0.5em;
   margin: -0.5em;
   text-decoration: none;
-  color: #209cee !important;
 }
 
 a:hover {
@@ -74,6 +69,8 @@ a:hover {
 
 .card-text {
   font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .card-body.card-body {
@@ -81,7 +78,8 @@ a:hover {
 }
 
 .button {
-  margin: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .btn.btn {
@@ -101,15 +99,7 @@ a:hover {
   font-weight: bold;
 }
 
-#subtitle {
-  text-indent: 1em;
-  font-size: 1rem;
-  font-style: italic;
-}
-
 #locationTextBox {
-  margin: 5px;
-  margin-top: 0px;
 }
 
 .spacer {

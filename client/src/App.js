@@ -40,17 +40,17 @@ const About = props => {
           housepricemap.ie was designed and built by Darren Greenfield as a project to help him
           learn to code. During his move to Palo Alto, California he came across lots of great US
           property websites showing rental and price history. He was surprised that similar sites
-          didn't exist for his home town of Dublin, Ireland. So he tried to make one...{' '}
+          didn't exist for his hometown of Dublin, Ireland. So he tried to make one.{' '}
           <div className='spacer' />
           You can read more about him in his{' '}
           <a href='https://medium.com/@darren.g' target='_blank' rel='noopener noreferrer'>
             Medium blog posts
           </a>{' '}
-          , check out his personal website at
+          , check out his personal website at:
           <a href='https://darrengreenfield.com' target='_blank' rel='noopener noreferrer'>
             darrengreenfield.com
           </a>
-          , or contact him at{' '}
+          , or contact him at:{' '}
           <a href='mailto:darren.greenfield@gmail.com'>darren@darrengreenfield.com</a>
         </PopoverBody>
       </Popover>
@@ -221,18 +221,17 @@ class App extends Component {
           <Card id='welcome-card'>
             <CardBody>
               <CardTitle>
-                <div id='house-price-map'>
+                <div className='text-primary' id='house-price-map'>
                   <a href='/'>House Price Map</a>
                 </div>
-                <div id='subtitle'>Dublin property sales mapped</div>
               </CardTitle>
-              <CardText>Where do you want to search?</CardText>
+              <CardText>Zoom in or enter a location below to see house sales in the area</CardText>
               <Input
                 type='text'
                 spellCheck='false'
                 name='location'
                 id='locationTextBox'
-                placeholder=''
+                placeholder='Enter Dublin location e.g. Shrewsbury Road'
                 onKeyDown={this.keyPress}
                 onChange={this.locationTextBoxChanged}
               />

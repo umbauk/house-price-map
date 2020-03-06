@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 // const addGeoHash = require('./utils/addGeoHashs');
+const dbBackup = require('./utils/dbBackup');
 
 const app = express();
 app.use(helmet());
@@ -35,6 +36,8 @@ app.use(function(err, req, res, next) {
 });
 
 exports.app = functions.https.onRequest(app);
+
+exports.dbBackup = functions.pubsub.schedule('every monday 03:10').onRun(dbBackup);
 
 // const runtimeOpts = {
 //   timeoutSeconds: 540,

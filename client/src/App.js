@@ -2,66 +2,17 @@
  * Main App file. Contains UI components and UI logic
  */
 
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { getMarkers } from './api/getMarkers';
 import { getCurrentLocation } from './api/getCurrentLocation';
 import { lookupPlaceName } from './api/lookupPlaceName';
+import { About } from './api/about.js';
 import loadGoogleScript from './loadGoogleScript'; // loads Google Maps API script
-import {
-  Card,
-  CardText,
-  CardBody,
-  CardTitle,
-  Button,
-  Input,
-  Popover,
-  PopoverHeader,
-  PopoverBody,
-} from 'reactstrap';
+import { Card, CardText, CardBody, CardTitle, Button, Input } from 'reactstrap';
 
 // global google is required to access the google package which is loaded in loadJS
 /* global google */
-
-const About = props => {
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
-  const toggle = () => setPopoverOpen(!popoverOpen);
-
-  return (
-    <div>
-      <Button id='about' type='button'>
-        About
-      </Button>
-      <Popover
-        placement='auto'
-        trigger='legacy'
-        isOpen={popoverOpen}
-        target='about'
-        toggle={toggle}
-      >
-        <PopoverHeader>About</PopoverHeader>
-        <PopoverBody>
-          housepricemap.ie was designed and built by Darren Greenfield as a project to help him
-          learn to code. During his move to Palo Alto, California he came across lots of great US
-          property websites showing rental and price history. He was surprised that similar sites
-          didn't exist for his hometown of Dublin, Ireland. So he tried to make one.{' '}
-          <div className='spacer' />
-          You can read more about him in his{' '}
-          <a href='https://medium.com/@darren.g' target='_blank' rel='noopener noreferrer'>
-            Medium blog posts
-          </a>{' '}
-          , check out his personal website at:
-          <a href='https://darrengreenfield.com' target='_blank' rel='noopener noreferrer'>
-            darrengreenfield.com
-          </a>
-          , or contact him at:{' '}
-          <a href='mailto:darren.greenfield@gmail.com'>darren@darrengreenfield.com</a>
-        </PopoverBody>
-      </Popover>
-    </div>
-  );
-};
 
 class App extends Component {
   constructor(props) {
@@ -96,6 +47,9 @@ class App extends Component {
     );
   }
 
+  /*
+   * Initialize the Google map, add listeners and set state
+   */
   async initMap() {
     const zoom = 12;
     let map = {};
@@ -183,6 +137,7 @@ class App extends Component {
   };
 
   keyPress = evt => {
+    // If return is pressed in the input box, treat it like submit button pressed
     if (evt.keyCode === 13) this.locationBtnClicked(evt);
   };
 
@@ -203,6 +158,7 @@ class App extends Component {
       if (evt.target.name === 'useCurrentLocation') {
         resolve(await getCurrentLocation());
         // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
+        // lookup input box contents in Google Places API
       } else if (!this.state.locationCoords) {
         resolve(
           await lookupPlaceName(
@@ -230,7 +186,9 @@ class App extends Component {
                   <a href='/'>House Price Map</a>
                 </div>
               </CardTitle>
-              <CardText>Zoom in or enter a location below to see house sales in the area</CardText>
+              <CardText>
+                <b>Zoom in</b> or <b>enter a location</b> below to see house sales in the area
+              </CardText>
               <Input
                 type='text'
                 spellCheck='false'

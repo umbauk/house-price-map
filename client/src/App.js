@@ -157,7 +157,7 @@ class App extends Component {
     return new Promise(async (resolve, reject) => {
       if (evt.target.name === 'useCurrentLocation') {
         resolve(await getCurrentLocation());
-        // if place not selected from Maps autocomplete dropdown list, user has typed in place manually
+        // if place not selected from Maps autocomplete dropdown list, user has typed in place. Manually
         // lookup input box contents in Google Places API
       } else if (!this.state.locationCoords) {
         resolve(
@@ -196,7 +196,7 @@ class App extends Component {
                 id='locationTextBox'
                 placeholder='Enter Dublin location e.g. Shrewsbury Road'
                 onKeyDown={this.keyPress}
-                onChange={this.locationTextBoxChanged}
+                onKeyUp={this.locationTextBoxChanged}
               />
               <Button
                 className='button'

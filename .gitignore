@@ -21,9 +21,10 @@ node_modules
 config.js
 db/dump
 db/ignored-files
+db/utils/property_price_db.json
+db/utils/csvFiles
 OLD_package*
 service-account-key.json
-db/utils/property_price_db.json
 .firebase
 firebase-debug.log
 

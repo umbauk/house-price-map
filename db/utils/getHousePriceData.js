@@ -10,26 +10,26 @@ const PPR_DOWNLOAD_URL1 =
   'https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-';
 const PPR_DOWNLOAD_URL2 = '-Dublin.csv/$FILE/PPR-';
 const PPR_DOWNLOAD_URL3 = '-Dublin.csv';
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0; // PPR website cert is rejected by node. This fixes it, but makes it unsafe
+const CSV_DIR = __dirname + '/csvFiles'; // Directory where CSV files are saved
 
+/*
+ * Get filename and date it was created of most recent file in ./csvFiles directory
+ */
 const getMostRecentDownload = async () => {
-  let mostRecent = fs.readdir(resolve('./csvFiles'), (err, list) => {
-    let mostRecentDate = new Date(2020, 0, 1);
-    let mostRecentFile;
+  let fileList = await fs.readdirSync(resolve(CSV_DIR));
 
-    list.forEach(file => {
-      console.log(file);
-      stats = fs.statSync(resolve(join('./csvFiles', file)));
-      if (stats.ctime > mostRecentDate) {
-        mostRecentFile = file;
-        mostRecentDate = stats.ctime;
-      }
-    });
-    return { file: mostRecentFile, date: mostRecentDate };
+  let mostRecentDate = new Date(2020, 0, 1);
+  let mostRecentFile;
+
+  fileList.forEach(file => {
+    stats = fs.statSync(resolve(join(CSV_DIR, file)));
+    if (stats.ctime > mostRecentDate) {
+      mostRecentFile = file;
+      mostRecentDate = stats.ctime;
+    }
   });
-
-  console.log(mostRecent);
-  return mostRecent;
+  return { file: mostRecentFile, date: mostRecentDate };
 };
 
 /*
@@ -89,35 +89,42 @@ const getHousePriceData = async pprLastUpdatedObj => {
 
   const pprCSV = await fetch(downloadString);
   const dest = fs.createWriteStream(
-    './csvFiles/ppr-' + pprLastUpdatedObj.year + month + pprLastUpdatedObj.day + '.csv',
+    CSV_DIR + '/ppr-' + pprLastUpdatedObj.year + month + pprLastUpdatedObj.day + '.csv',
   );
   await pprCSV.body.pipe(dest);
-  console.log(dest.path);
   return dest.path;
 };
 
-const formatCSV = filePath => {
-  // read in csv
-  //fs.readFile(filePath, async (err, data) => {});
+const formatCSV = async (newFilePath, mostRecentFile) => {
+  // read in both csvs
+  let newData = await fs.readFileSync(newFilePath);
+  let oldData = await fs.readFileSync(CSV_DIR + '/' + mostRecentFile);
+
+  console.log(oldData);
+
   // dedupe to get only new sales
   // format
-  //let pprObjects = await csv.toObjects(pprCSV);
+  // let pprObjects = await csv.toObjects(pprCSV);
 };
 
 // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-03-Dublin.csv/$FILE/PPR-2020-03-Dublin.csv
 
 async function main() {
-  let mostRecentDownload = await getMostRecentDownload();
-  let pprLastUpdatedObj = await getPprLastUpdated();
-  let pprLastUpdatedDate = new Date(
-    pprLastUpdatedObj.year,
-    pprLastUpdatedObj.month,
-    pprLastUpdatedObj.day,
-  );
+  try {
+    let mostRecentDownload = await getMostRecentDownload();
+    let pprLastUpdatedObj = await getPprLastUpdated();
+    let pprLastUpdatedDate = new Date(
+      pprLastUpdatedObj.year,
+      pprLastUpdatedObj.month,
+      pprLastUpdatedObj.day,
+    );
 
-  if (pprLastUpdatedDate > mostRecentDownload) {
-    let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
-    let formattedCSVFile = formatCSV(csvFilePath);
+    if (pprLastUpdatedDate > mostRecentDownload.date) {
+      let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
+      let formattedCSVFile = formatCSV(csvFilePath, mostRecentDownload.file);
+    }
+  } catch (err) {
+    console.log(err);
   }
   // populate coords
   // convert to JSON (CSVToJson.js)

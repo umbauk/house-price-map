@@ -2,7 +2,8 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const { resolve, join } = require('path');
-const csv = require('jquery-csv');
+// const csv = require('jquery-csv');
+const neatCsv = require('neat-csv');
 
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
@@ -17,18 +18,23 @@ const CSV_DIR = __dirname + '/csvFiles'; // Directory where CSV files are saved
  * Get filename and date it was created of most recent file in ./csvFiles directory
  */
 const getMostRecentDownload = async () => {
-  let fileList = await fs.readdirSync(resolve(CSV_DIR));
+  let fileList = await fs.promises.readdir(resolve(CSV_DIR));
 
   let mostRecentDate = new Date(2020, 0, 1);
   let mostRecentFile;
 
-  fileList.forEach(file => {
-    stats = fs.statSync(resolve(join(CSV_DIR, file)));
-    if (stats.ctime > mostRecentDate) {
-      mostRecentFile = file;
-      mostRecentDate = stats.ctime;
-    }
-  });
+  await Promise.all(
+    fileList.map(async file => {
+      let stats = await fs.promises.stat(resolve(join(CSV_DIR, file)));
+      if (stats.ctime > mostRecentDate) {
+        mostRecentFile = file;
+        mostRecentDate = stats.ctime;
+      }
+      return stats;
+    }),
+  );
+
+  console.log('mostRecentFile: ', mostRecentFile);
   return { file: mostRecentFile, date: mostRecentDate };
 };
 
@@ -73,38 +79,76 @@ const getPprLastUpdated = async () => {
 const getHousePriceData = async pprLastUpdatedObj => {
   // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-01-Dublin.csv/$FILE/PPR-2020-01-Dublin.csv
   // Account for zero-based months in date object and ensure it's a 2 digit string
-  const month =
-    pprLastUpdatedObj.month >= 9 ? pprLastUpdatedObj.month + 1 : `0${pprLastUpdatedObj.month + 1}`;
+  try {
+    const month =
+      pprLastUpdatedObj.month >= 9
+        ? pprLastUpdatedObj.month + 1
+        : `0${pprLastUpdatedObj.month + 1}`;
 
-  const downloadString =
-    PPR_DOWNLOAD_URL1 +
-    pprLastUpdatedObj.year +
-    '-' +
-    month +
-    PPR_DOWNLOAD_URL2 +
-    pprLastUpdatedObj.year +
-    '-' +
-    month +
-    PPR_DOWNLOAD_URL3;
+    const downloadString =
+      PPR_DOWNLOAD_URL1 +
+      pprLastUpdatedObj.year +
+      '-' +
+      month +
+      PPR_DOWNLOAD_URL2 +
+      pprLastUpdatedObj.year +
+      '-' +
+      month +
+      PPR_DOWNLOAD_URL3;
 
-  const pprCSV = await fetch(downloadString);
-  const dest = fs.createWriteStream(
-    CSV_DIR + '/ppr-' + pprLastUpdatedObj.year + month + pprLastUpdatedObj.day + '.csv',
-  );
-  await pprCSV.body.pipe(dest);
-  return dest.path;
+    const pprCSV = await fetch(downloadString);
+    const dest = fs.createWriteStream(
+      CSV_DIR + '/ppr-' + pprLastUpdatedObj.year + month + pprLastUpdatedObj.day + '.csv',
+    );
+
+    await new Promise((resolve, reject) => {
+      pprCSV.body.pipe(dest);
+      pprCSV.body.on('error', err => {
+        reject(err);
+      });
+      dest.on('finish', () => {
+        resolve();
+      });
+    });
+
+    return dest.path;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 const formatCSV = async (newFilePath, mostRecentFile) => {
   // read in both csvs
-  let newData = await fs.readFileSync(newFilePath);
-  let oldData = await fs.readFileSync(CSV_DIR + '/' + mostRecentFile);
+  try {
+    console.log('newFilePath: ', newFilePath);
+    fs.readFile(newFilePath, async (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(await neatCsv(data));
+    });
 
-  console.log(oldData);
+    console.log('oldFilePath: ', join(CSV_DIR, mostRecentFile));
+    fs.readFile(join(CSV_DIR, mostRecentFile), async (err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(await neatCsv(data));
+    });
+
+    // let newData = await fs.promises.readFile(newFilePath, 'utf8');
+    // let oldData = await fs.promises.readFile(join(CSV_DIR, mostRecentFile), 'utf8');
+    // // let newDataObj = await csv.toObjects(newData);
+    // let oldDataObj = await csv.toObjects(oldData);
+  } catch (error) {
+    console.log(error);
+  }
 
   // dedupe to get only new sales
   // format
-  // let pprObjects = await csv.toObjects(pprCSV);
 };
 
 // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-03-Dublin.csv/$FILE/PPR-2020-03-Dublin.csv
@@ -119,10 +163,10 @@ async function main() {
       pprLastUpdatedObj.day,
     );
 
-    if (pprLastUpdatedDate > mostRecentDownload.date) {
-      let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
-      let formattedCSVFile = formatCSV(csvFilePath, mostRecentDownload.file);
-    }
+    // if (pprLastUpdatedDate > mostRecentDownload.date) {
+    let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
+    let formattedCSVFile = formatCSV(csvFilePath, mostRecentDownload.file);
+    // }
   } catch (err) {
     console.log(err);
   }

@@ -12,6 +12,9 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 const geoHash = require('ngeohash');
 const { parse } = require('json2csv');
+const admin = require('firebase-admin');
+const serviceAccount = require('./service-account-key.json');
+const COLLECTION_KEY = 'house-sales-test'; // name of the firestore collection
 
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
@@ -250,6 +253,72 @@ const addGeoHash = houseArrayWithCoords => {
   });
 };
 
+/*
+ * Uploads a JSON file to Firestore, creating a new document for each object. Buffered for large files.
+ */
+const uploadToFirestore = jsonDataArray => {
+  // set Firestore credentials and settings
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://house-price-map.firebaseio.com',
+  });
+  const firestore = admin.firestore();
+  const settings = { timestampsInSnapshots: true };
+  firestore.settings(settings);
+
+  let batch = [];
+  let counter = 0;
+  let batchNum = 0;
+  batch[0] = firestore.batch();
+
+  /*
+   * Adds object to a batch of Firestore writes. When there are 450 objects in the batch (max is 500),
+   * commit batch
+   */
+  return new Promise((resolve, reject) => {
+    jsonDataArray.forEach(obj => {
+      counter++;
+      console.log(counter, obj);
+
+      batch[batchNum].set(firestore.collection(COLLECTION_KEY).doc(), obj);
+
+      if (counter > 450) {
+        counter = 0;
+        batch[batchNum]
+          .commit()
+          .then(() => {
+            console.log('>>>> Batch', batchNum, 'written successfully');
+          })
+          .catch(err => {
+            console.log('XXXXXXXXXXXX Error with batch write:', err);
+          });
+        batchNum++;
+        batch[batchNum] = firestore.batch();
+      }
+    });
+
+    batch[batchNum]
+      .commit()
+      .then(async () => {
+        console.log('>>>> Batch', batchNum, 'written successfully');
+        let lastUpdatedSnap = await firestore.collection('last-updated').get();
+
+        // set database last updated date for display in front-end
+        lastUpdatedSnap.forEach(async lastUpdated => {
+          await lastUpdated.ref.update({ date: new Date() }).catch(error => {
+            console.log('Error setting last update date: ', error);
+          });
+        });
+
+        resolve(true);
+      })
+      .catch(err => {
+        console.log('XXXXXXXXXXXX Error with batch write:', err);
+        reject(err);
+      });
+  });
+};
+
 // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-03-Dublin.csv/$FILE/PPR-2020-03-Dublin.csv
 
 async function main() {
@@ -275,7 +344,9 @@ async function main() {
     let fileName = `${pprLastUpdatedObj.year}${pprLastUpdatedObj.month}${pprLastUpdatedObj.day}.csv`;
     writeFile(join(CSV_DIR, '../uploads', fileName), finalCSV, 'utf8');
 
-    // append to db (uploadToFirestore.js edited to append instead of replace)
+    // append to firestore
+    await uploadToFirestore(finalJSON);
+    console.log('Complete');
     // save db last updated date in Firestore to display in Front-end
 
     // }

@@ -9,6 +9,7 @@ const neatCsv = require('neat-csv');
 const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_API_KEY,
 });
+const geoHash = require('ngeohash');
 
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
@@ -186,7 +187,7 @@ const formatCSV = async (newFilePath, mostRecentFile) => {
 };
 
 /*
- * Lookup address string in Google Maps geocode API to get lat and lng coordinates
+ * Lookup address strings in Google Maps geocode API to get lat and lng coordinates
  */
 const populateCoords = async houseSalesArray => {
   try {
@@ -227,12 +228,24 @@ const populateCoords = async houseSalesArray => {
         });
       }),
     ).then(() => {
-      console.log('Success');
       return houseSalesArray;
     });
   } catch (error) {
     console.error(error);
   }
+};
+
+/*
+ * Add geo hash from lat/lng coords as Firestore uses geo hash to pull relevant records
+ */
+const addGeoHash = houseArrayWithCoords => {
+  return houseArrayWithCoords.map(house => {
+    if (house.lat !== 0) {
+      let hash = geoHash.encode(house.lat, house.lng);
+      house.geoHash = hash;
+    }
+    return house;
+  });
 };
 
 // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-03-Dublin.csv/$FILE/PPR-2020-03-Dublin.csv
@@ -251,9 +264,11 @@ async function main() {
     let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
     let formattedCSVObj = await formatCSV(csvFilePath, mostRecentDownload.file);
     let formattedObjwCoords = await populateCoords(formattedCSVObj);
-    console.log(formattedObjwCoords);
+    let formattedObjwHash = addGeoHash(formattedObjwCoords);
+    console.log(formattedObjwHash);
 
     // Add GeoHash
+    // save to CSV
     // convert to JSON (CSVToJson.js)
     // append to db (uploadToFirestore.js edited to append instead of replace)
     // save db last updated date in Firestore to display in Front-end

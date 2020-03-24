@@ -4,12 +4,14 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile); // wraps fs.readFile in a Promise
+const writeFile = require('util').promisify(fs.writeFile); // wraps fs.readFile in a Promise
 const { resolve, join } = require('path');
 const neatCsv = require('neat-csv');
 const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_API_KEY,
 });
 const geoHash = require('ngeohash');
+const { parse } = require('json2csv');
 
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
@@ -264,12 +266,15 @@ async function main() {
     let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
     let formattedCSVObj = await formatCSV(csvFilePath, mostRecentDownload.file);
     let formattedObjwCoords = await populateCoords(formattedCSVObj);
-    let formattedObjwHash = addGeoHash(formattedObjwCoords);
-    console.log(formattedObjwHash);
+    let finalJSON = addGeoHash(formattedObjwCoords);
 
-    // Add GeoHash
-    // save to CSV
-    // convert to JSON (CSVToJson.js)
+    // convert JSON to CSV
+    let finalCSV = parse(finalJSON);
+
+    // save CSV file
+    let fileName = `${pprLastUpdatedObj.year}${pprLastUpdatedObj.month}${pprLastUpdatedObj.day}.csv`;
+    writeFile(join(CSV_DIR, '../uploads', fileName), finalCSV, 'utf8');
+
     // append to db (uploadToFirestore.js edited to append instead of replace)
     // save db last updated date in Firestore to display in Front-end
 

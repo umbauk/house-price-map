@@ -1,8 +1,8 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const readFile = require('util').promisify(fs.readFile); // wraps fs.readFile in a Promise
 const { resolve, join } = require('path');
-// const csv = require('jquery-csv');
 const neatCsv = require('neat-csv');
 
 const PPR_DATE_URL =
@@ -13,6 +13,18 @@ const PPR_DOWNLOAD_URL2 = '-Dublin.csv/$FILE/PPR-';
 const PPR_DOWNLOAD_URL3 = '-Dublin.csv';
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0; // PPR website cert is rejected by node. This fixes it, but makes it unsafe
 const CSV_DIR = __dirname + '/csvFiles'; // Directory where CSV files are saved
+const FIELD_NAME_MAPPING = {
+  // maps field names from PPR CSV download to field names in Firestore
+  'Date of Sale (dd/mm/yyyy)': 'date_of_sale',
+  Address: 'address',
+  County: 'county',
+  'Description of Property': 'description_of_property',
+  'Postal Code': 'postal_code',
+  'Price (�)': 'price',
+  'Not Full Market Price': 'not_full_market_price',
+  'VAT Exclusive': 'vat_exclusive',
+  'Property Size Description': 'property_size_description',
+};
 
 /*
  * Get filename and date it was created of most recent file in ./csvFiles directory
@@ -118,37 +130,53 @@ const getHousePriceData = async pprLastUpdatedObj => {
   }
 };
 
+const readCSV = async filePath => {
+  let data = await readFile(filePath);
+  return neatCsv(data);
+};
+
+const replaceFieldNames = houseSalesArray => {
+  console.log('houseSalesArray: ', houseSalesArray);
+  let returnArray = houseSalesArray.map(houseObj => {
+    for (const field in FIELD_NAME_MAPPING) {
+      delete Object.assign(houseObj, { [FIELD_NAME_MAPPING[field]]: houseObj[field] })[field];
+    }
+    return houseObj;
+  });
+  return returnArray;
+};
+
 const formatCSV = async (newFilePath, mostRecentFile) => {
-  // read in both csvs
   try {
-    console.log('newFilePath: ', newFilePath);
-    fs.readFile(newFilePath, async (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(await neatCsv(data));
+    let newDataObjs = await readCSV(newFilePath);
+    let oldDataObjs = await readCSV(join(CSV_DIR, mostRecentFile));
+
+    // Remove all house sales in both files to get set of unique (new) house sales
+    let dataObjNewVals = newDataObjs.filter(newHouse => {
+      return (
+        oldDataObjs.findIndex(
+          existingHouse =>
+            existingHouse.Address === newHouse.Address &&
+            existingHouse['Date of Sale (dd/mm/yyyy)'] === newHouse['Date of Sale (dd/mm/yyyy)'],
+        ) === -1
+      );
     });
 
-    console.log('oldFilePath: ', join(CSV_DIR, mostRecentFile));
-    fs.readFile(join(CSV_DIR, mostRecentFile), async (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(await neatCsv(data));
+    // replace field names
+    let dataObjWithNewFieldNames = replaceFieldNames(dataObjNewVals);
+
+    // format price correctly and convert date from Euro style to US style
+    let dateRegEx = /(\d+)\/(\d+)\/(\d{4})/; // gets day, month and year into separate elements
+    dataObjWithNewFieldNames.forEach(house => {
+      house.price = parseInt(house.price.replace(/[�,]/g, ''));
+      let uSDate = dateRegEx.exec(house.date_of_sale);
+      house.date_of_sale = `${uSDate[2]}/${uSDate[1]}/${uSDate[3]}`;
     });
 
-    // let newData = await fs.promises.readFile(newFilePath, 'utf8');
-    // let oldData = await fs.promises.readFile(join(CSV_DIR, mostRecentFile), 'utf8');
-    // // let newDataObj = await csv.toObjects(newData);
-    // let oldDataObj = await csv.toObjects(oldData);
+    console.log(dataObjWithNewFieldNames);
   } catch (error) {
     console.log(error);
   }
-
-  // dedupe to get only new sales
-  // format
 };
 
 // https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-2020-03-Dublin.csv/$FILE/PPR-2020-03-Dublin.csv

@@ -11,7 +11,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "csvtojson": "^2.0.10",
-    "firebase-admin": "^8.9.2",
+    "firebase-admin": "^8.10.0",
     "fs": "0.0.1-security",
     "jquery-csv": "^1.0.8",
     "neat-csv": "^5.2.0",

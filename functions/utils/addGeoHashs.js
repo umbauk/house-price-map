@@ -47,7 +47,7 @@ module.exports = () => {
     return snapshot;
   }
 
-  // Push references of insights into array so can map over them, which allows
+  // Push references of snapshots into array so can map over them, which allows
   // them to run in parallel and return a value on completion
   function extractData(snapshot) {
     let snapshotRefObjects = [];

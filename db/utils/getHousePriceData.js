@@ -1,9 +1,14 @@
+if (!process.env.GOOGLE_API_KEY) require('dotenv').config({ path: '../../server/.env' });
+
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const readFile = require('util').promisify(fs.readFile); // wraps fs.readFile in a Promise
 const { resolve, join } = require('path');
 const neatCsv = require('neat-csv');
+const googleMapsClient = require('@google/maps').createClient({
+  key: process.env.GOOGLE_API_KEY,
+});
 
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
@@ -174,8 +179,59 @@ const formatCSV = async (newFilePath, mostRecentFile) => {
     });
 
     console.log(dataObjWithNewFieldNames);
+    return dataObjWithNewFieldNames;
   } catch (error) {
     console.log(error);
+  }
+};
+
+/*
+ * Lookup address string in Google Maps geocode API to get lat and lng coordinates
+ */
+const populateCoords = async houseSalesArray => {
+  try {
+    return await Promise.all(
+      houseSalesArray.map((house, i) => {
+        // Request coordinates for addresses from Google Maps
+        return new Promise((resolve, reject) => {
+          googleMapsClient.geocode(
+            {
+              address: houseSalesArray[i].address,
+            },
+            (err, response) => {
+              if (err) {
+                console.log(err);
+                reject(err);
+              } else {
+                if (response.json.status !== 'OK') {
+                  console.log(`ERROR: ${response.json.status} - ${houseSalesArray[i].address}`);
+                  if (response.json.status === 'ZERO_RESULTS') {
+                    console.log(`${i + 1}: ${houseSalesArray[i].address}: ${response.json.status}`);
+                    houseSalesArray[i].lat = 0;
+                    houseSalesArray[i].lng = 0;
+                  }
+                  reject(response.json.status);
+                } else {
+                  console.log(
+                    `${i + 1}: ${houseSalesArray[i].address}: ${
+                      response.json.results[0].geometry.location.lat
+                    }, ${response.json.results[0].geometry.location.lng}`,
+                  );
+                  houseSalesArray[i].lat = response.json.results[0].geometry.location.lat;
+                  houseSalesArray[i].lng = response.json.results[0].geometry.location.lng;
+                  resolve();
+                }
+              }
+            },
+          );
+        });
+      }),
+    ).then(() => {
+      console.log('Success');
+      return houseSalesArray;
+    });
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -193,15 +249,19 @@ async function main() {
 
     // if (pprLastUpdatedDate > mostRecentDownload.date) {
     let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
-    let formattedCSVFile = formatCSV(csvFilePath, mostRecentDownload.file);
+    let formattedCSVObj = await formatCSV(csvFilePath, mostRecentDownload.file);
+    let formattedObjwCoords = await populateCoords(formattedCSVObj);
+    console.log(formattedObjwCoords);
+
+    // Add GeoHash
+    // convert to JSON (CSVToJson.js)
+    // append to db (uploadToFirestore.js edited to append instead of replace)
+    // save db last updated date in Firestore to display in Front-end
+
     // }
   } catch (err) {
     console.log(err);
   }
-  // populate coords
-  // convert to JSON (CSVToJson.js)
-  // append to db (uploadToFirestore.js edited to append instead of replace)
-  // save db last updated date
 }
 
 main();

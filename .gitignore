@@ -23,6 +23,7 @@ db/dump
 db/ignored-files
 db/utils/property_price_db.json
 db/utils/csvFiles
+db/utils/uploads
 OLD_package*
 service-account-key.json
 .firebase

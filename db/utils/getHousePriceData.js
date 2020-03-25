@@ -14,8 +14,8 @@ const geoHash = require('ngeohash');
 const { parse } = require('json2csv');
 const admin = require('firebase-admin');
 const serviceAccount = require('./service-account-key.json');
-const COLLECTION_KEY = 'house-sales-test'; // name of the firestore collection
 
+const COLLECTION_KEY = 'house-sales'; // name of the firestore collection
 const PPR_DATE_URL =
   'https://www.propertypriceregister.ie/website/npsra/pprweb.nsf/page/ppr-home-en';
 const PPR_DOWNLOAD_URL1 =
@@ -147,7 +147,6 @@ const readCSV = async filePath => {
 };
 
 const replaceFieldNames = houseSalesArray => {
-  console.log('houseSalesArray: ', houseSalesArray);
   let returnArray = houseSalesArray.map(houseObj => {
     for (const field in FIELD_NAME_MAPPING) {
       delete Object.assign(houseObj, { [FIELD_NAME_MAPPING[field]]: houseObj[field] })[field];
@@ -184,7 +183,6 @@ const formatCSV = async (newFilePath, mostRecentFile) => {
       house.date_of_sale = `${uSDate[2]}/${uSDate[1]}/${uSDate[3]}`;
     });
 
-    console.log(dataObjWithNewFieldNames);
     return dataObjWithNewFieldNames;
   } catch (error) {
     console.log(error);
@@ -207,7 +205,7 @@ const populateCoords = async houseSalesArray => {
             (err, response) => {
               if (err) {
                 console.log(err);
-                reject(err);
+                resolve();
               } else {
                 if (response.json.status !== 'OK') {
                   console.log(`ERROR: ${response.json.status} - ${houseSalesArray[i].address}`);
@@ -216,7 +214,7 @@ const populateCoords = async houseSalesArray => {
                     houseSalesArray[i].lat = 0;
                     houseSalesArray[i].lng = 0;
                   }
-                  reject(response.json.status);
+                  resolve();
                 } else {
                   console.log(
                     `${i + 1}: ${houseSalesArray[i].address}: ${
@@ -271,6 +269,8 @@ const uploadToFirestore = jsonDataArray => {
   let batchNum = 0;
   batch[0] = firestore.batch();
 
+  console.log('Starting upload...');
+
   /*
    * Adds object to a batch of Firestore writes. When there are 450 objects in the batch (max is 500),
    * commit batch
@@ -278,7 +278,6 @@ const uploadToFirestore = jsonDataArray => {
   return new Promise((resolve, reject) => {
     jsonDataArray.forEach(obj => {
       counter++;
-      console.log(counter, obj);
 
       batch[batchNum].set(firestore.collection(COLLECTION_KEY).doc(), obj);
 
@@ -331,25 +330,32 @@ async function main() {
       pprLastUpdatedObj.day,
     );
 
-    // if (pprLastUpdatedDate > mostRecentDownload.date) {
-    let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
-    let formattedCSVObj = await formatCSV(csvFilePath, mostRecentDownload.file);
-    let formattedObjwCoords = await populateCoords(formattedCSVObj);
-    let finalJSON = addGeoHash(formattedObjwCoords);
+    if (pprLastUpdatedDate > mostRecentDownload.date) {
+      let csvFilePath = await getHousePriceData(pprLastUpdatedObj);
+      let formattedCSVObj = await formatCSV(csvFilePath, mostRecentDownload.file);
 
-    // convert JSON to CSV
-    let finalCSV = parse(finalJSON);
+      console.log('CSV Formatted...');
+      let formattedObjwCoords = await populateCoords(formattedCSVObj);
+      console.log('Coords populated...');
+      formattedCSVObj = [];
+      let finalJSON = addGeoHash(formattedObjwCoords);
+      console.log('geoHashes added');
+      formattedObjwCoords = [];
 
-    // save CSV file
-    let fileName = `${pprLastUpdatedObj.year}${pprLastUpdatedObj.month}${pprLastUpdatedObj.day}.csv`;
-    writeFile(join(CSV_DIR, '../uploads', fileName), finalCSV, 'utf8');
+      // convert JSON to CSV
+      let finalCSV = parse(finalJSON);
 
-    // append to firestore
-    await uploadToFirestore(finalJSON);
-    console.log('Complete');
-    // save db last updated date in Firestore to display in Front-end
+      // save CSV file
+      let fileName = `${pprLastUpdatedObj.year}${pprLastUpdatedObj.month + 1}${
+        pprLastUpdatedObj.day
+      }.csv`;
+      writeFile(join(CSV_DIR, '../uploads', fileName), finalCSV, 'utf8');
+      finalCSV = '';
 
-    // }
+      // append to firestore
+      await uploadToFirestore(finalJSON);
+      console.log('Complete');
+    }
   } catch (err) {
     console.log(err);
   }

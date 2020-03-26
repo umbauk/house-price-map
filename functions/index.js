@@ -9,6 +9,8 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 // const addGeoHash = require('./utils/addGeoHashs');
 const dbBackup = require('./utils/dbBackup');
+const filesTest = require('./utils/filesTest');
+const getHousePriceData = require('./utils/getHousePriceData');
 
 const app = express();
 app.use(helmet());
@@ -38,6 +40,12 @@ app.use(function(err, req, res, next) {
 exports.app = functions.https.onRequest(app);
 
 exports.dbBackup = functions.pubsub.schedule('every monday 03:10').onRun(dbBackup);
+
+exports.filesTest = functions.pubsub.schedule('every monday 03:10').onRun(filesTest);
+
+exports.getHousePriceData = functions.pubsub
+  .schedule('every monday 03:10')
+  .onRun(getHousePriceData);
 
 // const runtimeOpts = {
 //   timeoutSeconds: 540,

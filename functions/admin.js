@@ -9,8 +9,10 @@ const serviceAccount = require('./service-account-key.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: DB_URL,
+  storageBucket: 'gs://house-price-map.appspot.com',
 });
 
 const db = admin.firestore();
+const storage = admin.storage();
 
-module.exports = { db };
+module.exports = { db, storage };
